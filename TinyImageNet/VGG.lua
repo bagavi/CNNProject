@@ -1,4 +1,5 @@
 require 'image'
+require 'loadcaffe'
 
 -- Loads the mapping from net outputs to human readable labels
 function load_synset()
@@ -27,12 +28,30 @@ end
 
 function VGG_forward( image, net )
 --    itorch.image(image)
-    image = preprocess(image)
-    prob, classes = net:forward(image):view(-1):sort(true)
---    synset_words = load_synset()
---    classes5 = torch.Tensor(5)
---    for i=1,5 do
---      classes5[i] =  synset_words[classes[i]])
---    end
-    return image
+    --p_img = preprocess(image)
+    --itorch.image(p_img)
+    prob,classes = net:forward(image):view(-1):sort(true)
+    --print(classes)
+    -- synset_words = load_synset()
+    -- print(synset_words)
+    -- classes5 = torch.Tensor(5)
+    -- for i=1,5 do
+    --   classes5[i] =  synset_words[classes[i]])
+    -- end
+    return classes
 end
+
+----------------------------------------------------------------------------
+-- Loads a pretrained VGG. trained caffe binary, prototxt mentioned 
+-- in the function.
+----------------------------------------------------------------------------
+
+function load_VGG()
+    prototxt = '../../Data/VGG_caffe/VGG_ILSVRC_16_layers_deploy.prototxt'
+    binary = '../../Data/VGG_caffe/VGG_ILSVRC_16_layers.caffemodel'
+
+    -- this will load the network and print it's structure
+    net = loadcaffe.load(prototxt, binary);
+    return net
+end
+
