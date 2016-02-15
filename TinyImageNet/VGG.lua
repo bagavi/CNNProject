@@ -26,19 +26,16 @@ function preprocess(img)
   return img
 end
 
-function VGG_forward( image, net )
---    itorch.image(image)
-    --p_img = preprocess(image)
-    --itorch.image(p_img)
-    prob,classes = net:forward(image):view(-1):sort(true)
-    --print(classes)
-    -- synset_words = load_synset()
-    -- print(synset_words)
-    -- classes5 = torch.Tensor(5)
-    -- for i=1,5 do
-    --   classes5[i] =  synset_words[classes[i]])
-    -- end
-    return classes
+function VGG_forward_test(image,net)
+    p_img = preprocess(image)
+    prob,classes = net:forward(p_img):view(-1):sort(true)
+    synset_words = load_synset()
+    classes5 = {}
+    for i=1,5 do
+      table.insert(classes5, synset_words[classes[i]])
+    end
+
+    return classes5
 end
 
 ----------------------------------------------------------------------------
