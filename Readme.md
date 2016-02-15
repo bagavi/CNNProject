@@ -17,4 +17,5 @@ After cloing the git repository. Download the following files in a 'Data' Folder
 3. 60min Deep neural network tutorial: https://github.com/soumith/cvpr2015/blob/master/Deep%20Learning%20with%20Torch.ipynb
 4. Image package: https://github.com/torch/image
 5. nn module documentation: https://github.com/torch/nn/blob/master/doc/overview.md#nn.overview.dok
+6. https://github.com/torch/torch7 - The whole of Torch code.
  
