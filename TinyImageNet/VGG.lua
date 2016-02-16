@@ -11,7 +11,6 @@ function load_synset()
 end
 
 function preprocess(img) 
-   require 'image'
     -- 16 layer VGG expects a 3x224x224 sized image
   img = image.scale(img, 224, 224)
 -- Directly obtained from the website
@@ -26,8 +25,8 @@ function preprocess(img)
   return img
 end
 
-function VGG_forward_test(image,net)
-    p_img = preprocess(image)
+function VGG_forward_test(img,net)
+    p_img = preprocess(img)
     prob,classes = net:forward(p_img):view(-1):sort(true)
     synset_words = load_synset()
     classes5 = {}
@@ -38,6 +37,24 @@ function VGG_forward_test(image,net)
     return classes5
 end
 
+function get_VGG_hypercolumns(img,net,layer_nums)
+    p_img = preprocess(img)
+    prob,classes = net:forward(p_img):view(-1):sort(true)
+
+    -- layer_1 = net.modules[5].output;
+    -- hyper_columns = image.scale(layer_1,224,224,'simple');
+    local layer = net.modules[layer_nums[1]].output
+    hyper_columns = image.scale(layer,224,224,'simple')
+
+    print(#layer_nums);
+    for i=2,#layer_nums do
+        local layer = net.modules[layer_nums[i]].output
+        local scaled_layer = image.scale(layer,224,224,'simple')
+        hyper_columns = torch.cat(hyper_columns,scaled_layer,1)
+    end
+
+    return hyper_columns
+end
 ----------------------------------------------------------------------------
 -- Loads a pretrained VGG. trained caffe binary, prototxt mentioned 
 -- in the function.
