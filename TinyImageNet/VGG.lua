@@ -43,7 +43,7 @@ end
 -----------------------------------------------------------------
 function get_VGG_hypercolumns(img,net,layer_nums)
     p_img = preprocess(img)
-    prob,classes = net:forward(p_img):view(-1):sort(true)
+    prob, classes = net:forward(p_img):view(-1):sort(true)
 
     -- layer_1 = net.modules[5].output;
     -- hyper_columns = image.scale(layer_1,224,224,'simple');
