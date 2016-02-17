@@ -37,6 +37,9 @@ function VGG_forward_test(img,net)
     return classes5
 end
 
+------------------------------------------------------------------
+-- Returns the VGG hyperolumns
+-----------------------------------------------------------------
 function get_VGG_hypercolumns(img,net,layer_nums)
     p_img = preprocess(img)
     prob,classes = net:forward(p_img):view(-1):sort(true)
@@ -44,12 +47,12 @@ function get_VGG_hypercolumns(img,net,layer_nums)
     -- layer_1 = net.modules[5].output;
     -- hyper_columns = image.scale(layer_1,224,224,'simple');
     local layer = net.modules[layer_nums[1]].output
-    hyper_columns = image.scale(layer,224,224,'simple')
+    hyper_columns = image.scale(layer,112,112,'simple')
 
     print(#layer_nums);
     for i=2,#layer_nums do
         local layer = net.modules[layer_nums[i]].output
-        local scaled_layer = image.scale(layer,224,224,'simple')
+        local scaled_layer = image.scale(layer,112,112,'simple')
         hyper_columns = torch.cat(hyper_columns,scaled_layer,1)
     end
 
