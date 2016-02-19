@@ -116,3 +116,49 @@ function create_hypercolumn_dataset(num_images, layer_nums)
     return hc_dataset;
 end
 
+
+function create_hypercolumn_dataset_bw(num_images, layer_nums)
+    local image_dir = '../../Data/tiny-imagenet-200/test/images/'
+    local max_count = num_images;
+    local count = 1;
+    local hc_batch = nil;
+    local im_batch = nil
+
+    for file in lfs.dir(image_dir) do
+        if string.match(file, ".JPEG") then
+            print( count .. ") Converting file: " .. file )
+            image_path = image_dir .. file
+
+            local im = image.load(image_path);
+            local im_y = image.rgb2y(im);
+            local im_size = im:size();
+            local im_y_stacked = torch.cat(im_y,im_y,1);
+            im_y_stacked = torch.cat(im_y_stacked,im_y,1);
+
+            local hc_temp = get_VGG_hypercolumns(im_y_stacked,VGG_net,layer_nums)
+            local hc_size = hc_temp:size();
+            hc_temp = hc_temp:reshape(1,hc_size[1], hc_size[2], hc_size[3] );
+            im = im:reshape(1,im_size[1],im_size[2],im_size[3])
+
+            if count == 1 then
+                hc_batch = hc_temp
+                im_batch = im
+            end
+
+            hc_batch = torch.cat(hc_batch, hc_temp,1)
+            im_batch = torch.cat(im_batch,im,1)
+
+            if count == (max_count-1) then
+                break;
+            end
+            count = count + 1;
+
+        end
+    end
+
+    hc_dataset = {}
+    hc_dataset["hypercolumns"] = hc_batch
+    hc_dataset["images"] = im_batch
+    return hc_dataset;
+end
+

@@ -3,47 +3,50 @@ require "image"
 
 -- convert rgb to grayscale by averaging channel intensities
 function rgb2gray(im)
-	-- Image.rgb2y uses a different weight mixture
+    -- Image.rgb2y uses a different weight mixture
 
-	local dim, w, h = im:size()[1], im:size()[2], im:size()[3]
-	if dim ~= 3 then
-		 print('<error> expected 3 channels')
-		 return im
-	end
+    local dim, w, h = im:size()[1], im:size()[2], im:size()[3]
+    if dim ~= 3 then
+         print('<error> expected 3 channels')
+         return im
+    end
 
-	-- a cool application of tensor:select
-	local r = im:select(1, 1)
-	local g = im:select(1, 2)
-	local b = im:select(1, 3)
+    -- a cool application of tensor:select
+    local r = im:select(1, 1)
+    local g = im:select(1, 2)
+    local b = im:select(1, 3)
 
-	local z = torch.Tensor(w, h):zero()
+    local z = torch.Tensor(w, h):zero()
 
-	-- z = z + 0.21r
-	z = z:add(0.21, r)
-	z = z:add(0.72, g)
-	z = z:add(0.07, b)
-	return z
+    -- z = z + 0.21r
+    z = z:add(0.21, r)
+    z = z:add(0.72, g)
+    z = z:add(0.07, b)
+    return z
 end
 
 -- convert grayscale to 3 channel rgb image 
 function gray2rgb(grayim)
+    -- Creating a local tensor variable
+    width = grayim:size()[1]
+    height = grayim:size()[2]
+    local im = torch.Tensor(3, width, height)
+    -- Initializing each channel to a gray channel
+    im[1] = grayim
+    im[2] = grayim
+    im[3] = grayim
 
-	-- Creating a local tensor variable
-	width = grayim:size()[1]
-	height = grayim:size()[2]
-	local im = torch.Tensor(3, width, height)
-	-- Initializing each channel to a gray channel
-	im[1] = grayim
-	im[2] = grayim
-	im[3] = grayim
-
-	return im
+    return im
 end
 
-
-function create_yuv_images(images)
+--------------------------------------------------------------
+-- Returns y_images and uv_images for the batch
+--------------------------------------------------------------
+function create_yuv_images(images,output_w,output_h)
+    w = output_w
+    h = output_h
     local yuv_temp = image.rgb2yuv(images[1]);
-    yuv_temp = image.scale(yuv_temp,28,28,'bilinear')
+    yuv_temp = image.scale(yuv_temp,w,h,'bilinear')
     local uv_temp = yuv_temp[{{2,3}}]
     local y_temp = yuv_temp[{{1}}]
     uv_temp = uv_temp:reshape(1,uv_temp:size()[1], uv_temp:size()[2], uv_temp:size()[3] );
@@ -53,7 +56,7 @@ function create_yuv_images(images)
 
     for count=2,images:size()[1] do
         yuv_temp = image.rgb2yuv(images[count]);
-        yuv_temp = image.scale(yuv_temp,28,28,'bilinear')
+        yuv_temp = image.scale(yuv_temp,w,h,'bilinear')
         uv_temp = yuv_temp[{{2,3}}]
         y_temp = yuv_temp[{{1}}]
 
@@ -66,7 +69,9 @@ function create_yuv_images(images)
     return uv_images,y_images
 end
 
-
+--------------------------------------------------------------
+-- Returns a file list of all the files in the directory
+--------------------------------------------------------------
 function get_file_names()
     local image_dir = '../../Data/tiny-imagenet-200/test/images/'
     local max_count = num_images;
@@ -80,6 +85,9 @@ function get_file_names()
     return file_names;
 end
 
+--------------------------------------------------------------
+-- Returns a random batch of images
+--------------------------------------------------------------
 function get_image_batch(num_images)
     local image_dir = '../../Data/tiny-imagenet-200/test/images/'
     local max_count = num_images;
@@ -88,7 +96,7 @@ function get_image_batch(num_images)
     local file_names = get_file_names();
     local num_files = #file_names
     
-    for count=1,num_images-1 do
+    for count=1,num_images do
         rand_index = math.random(1,num_files);
         file = file_names[rand_index];
         local image_path = image_dir .. file
@@ -97,11 +105,12 @@ function get_image_batch(num_images)
         
         im = im:reshape(1,im_size[1],im_size[2],im_size[3])
 
-            if count == 1 then
-                hc_batch = hc_temp
-                im_batch = im
-            end
-        im_batch = torch.cat(im_batch,im,1)
+        if count == 1 then
+            hc_batch = hc_temp
+            im_batch = im
+        else
+            im_batch = torch.cat(im_batch,im,1)
+        end
     
     end
     return im_batch
