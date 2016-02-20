@@ -5,7 +5,7 @@ require "torch"
 function BasicConvNet2()
     -- Number of filters in different layers 
     net = nn.Sequential()
-    HyperColumnHeight = 192
+    HyperColumnHeight = 193
     Layer1FilterNum = 32
     Layer2FilterNum = 64
     Layer3FilterNum = 2

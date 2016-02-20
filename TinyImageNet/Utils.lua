@@ -96,22 +96,23 @@ function get_image_batch(num_images)
     local file_names = get_file_names();
     local num_files = #file_names
     
+    -- Bad code
+    local file = file_names[1];
+    local image_path = image_dir .. file
+    local im = image.load(image_path);
+    local im_size = im:size();
+    local im_batch = torch.Tensor(num_images, im_size[1], im_size[2], im_size[3])
+    
     for count=1,num_images do
         rand_index = math.random(1,num_files);
-        file = file_names[rand_index];
+        local file = file_names[rand_index];
         local image_path = image_dir .. file
-        local im = image.load(image_path);
+        local im = image.load(image_path,3);
         local im_size = im:size();
-        
-        im = im:reshape(1,im_size[1],im_size[2],im_size[3])
-
-        if count == 1 then
-            hc_batch = hc_temp
-            im_batch = im
-        else
-            im_batch = torch.cat(im_batch,im,1)
-        end
-    
+        im_batch[count] = im:reshape(1,im_size[1],im_size[2],im_size[3])
+        -- else
+        --     count = count -1
+        -- end    
     end
     return im_batch
 end

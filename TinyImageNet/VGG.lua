@@ -43,7 +43,7 @@ end
 -----------------------------------------------------------------
 function get_VGG_hypercolumns(img,net,layer_nums)
     p_img = preprocess(img)
-    prob, classes = net:forward(p_img):view(-1):sort(true)
+    net:forward(p_img):view(-1):sort(true)
 
     -- layer_1 = net.modules[5].output;
     -- hyper_columns = image.scale(layer_1,224,224,'simple');
@@ -56,7 +56,11 @@ function get_VGG_hypercolumns(img,net,layer_nums)
         local scaled_layer = image.scale(layer,112,112,'simple')
         hyper_columns = torch.cat(hyper_columns,scaled_layer,1)
     end
-
+    -- Adding the grayscale image
+    scaled_image = image.scale(img,112,112,'simple')
+    
+    hyper_columns = torch.cat(hyper_columns, scaled_image[{{1}}], 1)
+    
     return hyper_columns
 end
 ----------------------------------------------------------------------------
@@ -74,91 +78,56 @@ function load_VGG()
 end
 
 
-function create_hypercolumn_dataset(num_images, layer_nums)
-    local image_dir = '../../Data/tiny-imagenet-200/test/images/'
+function create_hypercolumn_dataset_random_bw(num_images, VGG_net, layer_nums)
     local max_count = num_images;
+    local im_batch = get_image_batch(num_images)
+    
     local count = 1;
+    local y_temp = image.rgb2y(im_batch[count])
+    local im_y = torch.cat(y_temp,y_temp,1);
+    im_y = torch.cat(im_y,y_temp,1);
     local hc_batch = nil;
-    local im_batch = nil
+    local hc_temp = get_VGG_hypercolumns(im_y, VGG_net, layer_nums)
+    local hc_size = hc_temp:size();
+    local hc_batch = hc_temp:reshape(1,hc_size[1], hc_size[2], hc_size[3] );
+    
+    for count=2,num_images do
 
-    for file in lfs.dir(image_dir) do
-        if string.match(file, ".JPEG") then
-            print( count .. ") Converting file: " .. file )
-            image_path = image_dir .. file
+        y_temp = image.rgb2y(im_batch[count])
+        im_y = torch.cat(y_temp,y_temp,1);
+        im_y = torch.cat(im_y,y_temp,1);
 
-            local im = image.load(image_path);
-            local im_size = im:size();
-
-            local hc_temp = get_VGG_hypercolumns(im,VGG_net,layer_nums)
-            local hc_size = hc_temp:size();
-            hc_temp = hc_temp:reshape(1,hc_size[1], hc_size[2], hc_size[3] );
-            im = im:reshape(1,im_size[1],im_size[2],im_size[3])
-
-            if count == 1 then
-                hc_batch = hc_temp
-                im_batch = im
-            end
-
-            hc_batch = torch.cat(hc_batch, hc_temp,1)
-            im_batch = torch.cat(im_batch,im,1)
-
-            if count == (max_count-1) then
-                break;
-            end
-            count = count + 1;
-
-        end
+        hc_temp = get_VGG_hypercolumns(im_y,VGG_net,layer_nums)
+        hc_temp = hc_temp:reshape(1,hc_size[1], hc_size[2], hc_size[3] );
+        hc_batch = torch.cat(hc_batch, hc_temp,1)
     end
-
-    hc_dataset = {}
-    hc_dataset["hypercolumns"] = hc_batch
-    hc_dataset["images"] = im_batch
-    return hc_dataset;
+    
+    return im_batch, hc_batch
+    
 end
 
-
-function create_hypercolumn_dataset_bw(num_images, layer_nums)
-    local image_dir = '../../Data/tiny-imagenet-200/test/images/'
+function create_hypercolumn_dataset_random(num_images,VGG_net, layer_nums)
     local max_count = num_images;
+    local im_batch = get_image_batch(num_images)
     local count = 1;
+    
     local hc_batch = nil;
-    local im_batch = nil
-
-    for file in lfs.dir(image_dir) do
-        if string.match(file, ".JPEG") then
-            print( count .. ") Converting file: " .. file )
-            image_path = image_dir .. file
-
-            local im = image.load(image_path);
-            local im_y = image.rgb2y(im);
-            local im_size = im:size();
-            local im_y_stacked = torch.cat(im_y,im_y,1);
-            im_y_stacked = torch.cat(im_y_stacked,im_y,1);
-
-            local hc_temp = get_VGG_hypercolumns(im_y_stacked,VGG_net,layer_nums)
-            local hc_size = hc_temp:size();
-            hc_temp = hc_temp:reshape(1,hc_size[1], hc_size[2], hc_size[3] );
-            im = im:reshape(1,im_size[1],im_size[2],im_size[3])
-
-            if count == 1 then
-                hc_batch = hc_temp
-                im_batch = im
-            end
-
-            hc_batch = torch.cat(hc_batch, hc_temp,1)
-            im_batch = torch.cat(im_batch,im,1)
-
-            if count == (max_count-1) then
-                break;
-            end
-            count = count + 1;
-
-        end
+    local hc_temp = get_VGG_hypercolumns(im_batch[count],VGG_net,layer_nums)
+    local hc_size = hc_temp:size();
+    local hc_batch = hc_temp:reshape(1,hc_size[1], hc_size[2], hc_size[3] );
+    
+    for count=2,num_images do
+        hc_temp = get_VGG_hypercolumns(im_batch[count],VGG_net,layer_nums)
+        hc_temp = hc_temp:reshape(1,hc_size[1], hc_size[2], hc_size[3] );
+        hc_batch = torch.cat(hc_batch, hc_temp,1)
     end
-
-    hc_dataset = {}
-    hc_dataset["hypercolumns"] = hc_batch
-    hc_dataset["images"] = im_batch
-    return hc_dataset;
+    return im_batch,hc_batch
+    
 end
 
+function trim_net(net, last_layer_required)
+    model_size = #net.modules-1
+    for i= last_layer_required, model_size do
+        net:remove(last_layer_required+1)
+    end
+end
