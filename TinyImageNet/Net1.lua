@@ -87,6 +87,23 @@ function BasicConvNet1()
 end
 
 
+--------------------------------------------------------
+-- Displays the validation results
+--------------------------------------------------------
+-- uses opt.num_val_images, opt.layers, opt.display_size
+function display_validation_results(VGG_net, shallow_net, opt)
+    local val_im_batch,val_hc_batch = create_hypercolumn_validation_dataset_bw(opt.num_val_images, VGG_net,opt.layers)
+    local uv_images,y_images = create_yuv_images(val_im_batch,28,28)
+    shallow_net:forward(val_hc_batch);
+    local val_uv = model.output - 0.5;
+    local size = opt.display_size
+    print("Input, Output, Original")
+    for i = 1,opt.num_val_images do
+        itorch.image({image.scale(y2rgb(image.rgb2y(val_im_batch[i])),size,size),
+                      image.scale(image.yuv2rgb(torch.cat(y_images[i],val_uv[i],1)),size,size),
+                      image.scale(image.yuv2rgb(torch.cat(y_images[i],uv_images[i],1)),size,size)})
+    end
+end
 
 
 
