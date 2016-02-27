@@ -1,14 +1,46 @@
-require 'copy';
+
+# coding: utf-8
+
+# In[1]:
+
+-- require 'VGG';
 require 'nn';
-require 'image';
+
+
+# In[2]:
+
+-- require 'VGG';
+-- VGG_net = load_VGG();
+-- print('VGGnet5\n' .. VGG_net:__tostring());
+
+
+# In[3]:
+
+-- local layer_nums = {9,16}
+-- local num_images = 20;
+-- hc_dataset = create_hypercolumn_dataset(num_images, layer_nums)
+
+
+# ##  Loading the data from disk
+
+# In[4]:
+
 hc_file_name = '../../Data/tiny-imagenet-200/test/hc/test.t7'
 hc_dataset = torch.load(hc_file_name)
+
+
+# In[5]:
 
 hypercolumns = hc_dataset["hypercolumns"]
 images = hc_dataset["images"]
 print(hypercolumns:size())
 num_hypercolumns = hypercolumns:size()[2]
 batch_size = hypercolumns:size()[1]
+
+
+# ## Converting the data labels from rgb to uv format
+
+# In[6]:
 
 local yuv_temp = image.rgb2yuv(images[1]);
 yuv_temp = image.scale(yuv_temp,28,28,'bilinear')
@@ -33,6 +65,18 @@ for count=2,batch_size do
 end
     print(uv_images:size())
 
+
+# ## Initializing the trainset datastructure.
+# The format should be as follows
+# 1) Trainset.data = contains **X minibatches**
+
+# In[7]:
+
+print(y_images:size())
+
+
+# In[8]:
+
 trainset={};
 trainset.data = torch.Tensor(1, hypercolumns:size()[1],hypercolumns:size()[2],hypercolumns:size()[3],hypercolumns:size()[4])
 trainset.label = torch.Tensor(1,uv_images:size()[1],uv_images:size()[2],uv_images:size()[3],uv_images:size()[4])
@@ -54,6 +98,11 @@ function trainset:size()
 end
 
 
+# In[9]:
+
+require "nn"
+require "torch"
+
 function BasicConvNet1()
     -- Number of filters in different layers 
     net = nn.Sequential()
@@ -65,7 +114,7 @@ function BasicConvNet1()
 
     -- [[ Layer 1 ]]
     -- HyperColumnHeight input image channel, Layer1FilterNum output channels, 3x3 convolution kernel, 1 stride W, 1 stride H, 1 pad W, 1 pad R
-     
+    net:add(nn.SpatialConvolution(HyperColumnHeight, Layer1FilterNum, 3, 3, 1, 1, 1, 1)) 
     -- Batch Normalization
     net:add(nn.SpatialBatchNormalization(Layer1FilterNum))                       
     -- ReLU non-linearity
@@ -95,6 +144,9 @@ function BasicConvNet1()
 
 end
 
+
+# In[ ]:
+
 -- Loading the net
 require('Net1')
 net = BasicConvNet1()
@@ -108,13 +160,16 @@ print('MSEcriterion defined')
 
 trainer = nn.StochasticGradient(net, criterion)
 -- learning rate init
-trainer.learningRate = 1 -- This can be further increased
+trainer.learningRate = 0.2 --
 -- Number of Epocs
-trainer.maxIteration = 5
+trainer.maxIteration = 20
 trainer.verbose = true
 trainer.shuffleIndices = false
 trainer.learningRateDecay = .975
 print('Trainer defined')
+
+
+# In[12]:
 
 -- Passing a random input
 input = torch.rand(2,384,112,112) -- pass a random tensor as input to the network
@@ -127,22 +182,88 @@ criterion:forward(output, ExpectedFakeOutput)
 gradients = criterion:backward(output, ExpectedFakeOutput)
 print("No code error during sanity check (Logical error might still exist)")
 
-untrained_net = copy3(net)
--- print("Initial error", criterion:forward(a, uv_images))
+
+# In[13]:
+
+a = net:forward(hypercolumns)
+print("Initial error", criterion:forward(a, uv_images))
+
+
+# ## Network output before training
+
+# In[14]:
+
+a = net:forward(hypercolumns)
+
+
+# In[15]:
+
+i = 1
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],a[i],1)), 64,64))
+itorch.image(images[i] )
+
+print('\n')
+i = 4
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],a[i],1)), 64,64))
+itorch.image(images[i] )
+
+print('\n')
+i = 8
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],a[i],1)), 64,64))
+itorch.image(images[i] )
+
+print('\n')
+i = 16
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],a[i],1)), 64,64))
+itorch.image(images[i] )
+
+
+# In[ ]:
 
 print('The training starts')
 -- Woah! Traingin the data
 trainer:train(trainset)
+torch.save('../Models/Overfit', net)
+
+
+# In[21]:
 
 b = net:forward(hypercolumns)
-a = untrained_net:forward(hypercolumns)
+
+
+# In[22]:
+
+
+i = 1
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],a[i],1)), 64,64))
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],b[i],1)), 64,64))
+itorch.image(images[i] )
+
+print('\n')
+i = 4
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],a[i],1)), 64,64))
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],b[i],1)), 64,64))
+itorch.image(images[i] )
+
+print('\n')
+i = 8
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],a[i],1)), 64,64))
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],b[i],1)), 64,64))
+itorch.image(images[i] )
+
+print('\n')
+i = 16
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],a[i],1)), 64,64))
+itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],b[i],1)), 64,64))
+itorch.image(images[i] )
+
+
+# In[ ]:
 
 for i=1,16 do    
     print('\n')
-    A = image.scale(image.yuv2rgb(torch.cat(y_images[i],a[i],1)), 64,64)
-    B = image.scale(image.yuv2rgb(torch.cat(y_images[i],b[i],1)), 64,64)
-    image.save("Orig"..i,images[i])
-    image.save("Random"..i,A)
-    image.save("Network"..i,B)
+    itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],a[i],1)), 64,64))
+    itorch.image(image.scale(image.yuv2rgb(torch.cat(y_images[i],b[i],1)), 64,64))
+    itorch.image(images[i] )
 end
 
