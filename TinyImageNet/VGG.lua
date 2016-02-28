@@ -77,7 +77,9 @@ function load_VGG()
     return net
 end
 
-
+----------------------------------------------------------------------------
+-- create random black&white hypercolumn dataset
+----------------------------------------------------------------------------
 function create_hypercolumn_dataset_random_bw(num_images, VGG_net, layer_nums)
     local max_count = num_images;
     local im_batch = get_image_batch(num_images)
@@ -106,6 +108,41 @@ function create_hypercolumn_dataset_random_bw(num_images, VGG_net, layer_nums)
     
 end
 
+
+----------------------------------------------------------------------------
+-- create black&white validation hypercolumn dataset
+----------------------------------------------------------------------------
+function create_hypercolumn_validation_dataset_bw(num_images, VGG_net, layer_nums)
+    local max_count = num_images;
+    local im_batch = get_validation_batch(num_images)
+    
+    local count = 1;
+    local y_temp = image.rgb2y(im_batch[count])
+    local im_y = torch.cat(y_temp,y_temp,1);
+    im_y = torch.cat(im_y,y_temp,1);
+    local hc_batch = nil;
+    local hc_temp = get_VGG_hypercolumns(im_y, VGG_net, layer_nums)
+    local hc_size = hc_temp:size();
+    local hc_batch = hc_temp:reshape(1,hc_size[1], hc_size[2], hc_size[3] );
+    
+    for count=2,num_images do
+
+        y_temp = image.rgb2y(im_batch[count])
+        im_y = torch.cat(y_temp,y_temp,1);
+        im_y = torch.cat(im_y,y_temp,1);
+
+        hc_temp = get_VGG_hypercolumns(im_y,VGG_net,layer_nums)
+        hc_temp = hc_temp:reshape(1,hc_size[1], hc_size[2], hc_size[3] );
+        hc_batch = torch.cat(hc_batch, hc_temp,1)
+    end
+    
+    return im_batch, hc_batch
+    
+end
+
+----------------------------------------------------------------------------
+-- create random hypercolumn dataset
+----------------------------------------------------------------------------
 function create_hypercolumn_dataset_random(num_images,VGG_net, layer_nums)
     local max_count = num_images;
     local im_batch = get_image_batch(num_images)

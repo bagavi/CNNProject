@@ -85,6 +85,23 @@ function get_file_names()
     return file_names;
 end
 
+
+--------------------------------------------------------------
+-- Returns a file list of all the files in the directory
+--------------------------------------------------------------
+function get_val_image_names()
+    local val_image_dir = '../../Data/tiny-imagenet-200/val/images/'
+    local max_count = num_images;
+    file_names = {};
+
+    for file in lfs.dir(val_image_dir) do
+        if string.match(file, ".JPEG") then
+            table.insert(file_names,file)
+        end
+    end
+    return file_names;
+end
+
 --------------------------------------------------------------
 -- Returns a random batch of images
 --------------------------------------------------------------
@@ -103,8 +120,10 @@ function get_image_batch(num_images)
     local im_size = im:size();
     local im_batch = torch.Tensor(num_images, im_size[1], im_size[2], im_size[3])
     
+    math.randomseed( os.time() )
     for count=1,num_images do
         rand_index = math.random(1,num_files);
+        
         local file = file_names[rand_index];
         local image_path = image_dir .. file
         local im = image.load(image_path,3);
@@ -116,3 +135,49 @@ function get_image_batch(num_images)
     end
     return im_batch
 end
+
+
+
+--------------------------------------------------------------
+-- Returns the validation batch
+--------------------------------------------------------------
+function get_validation_batch(num_images)
+    local val_image_dir = '../../Data/tiny-imagenet-200/val/images/'
+    local max_count = num_images;
+    local count = 1;
+    local im_batch = nil
+    local file_names = get_val_image_names();
+    local num_files = #file_names
+    
+    -- Bad code
+    local file = file_names[1];
+    local image_path = val_image_dir .. file
+    local im = image.load(image_path);
+    local im_size = im:size();
+    local im_batch = torch.Tensor(num_images, im_size[1], im_size[2], im_size[3])
+    
+    -- IMP code
+    math.randomseed(10)
+    for count=1,num_images do
+        rand_index = math.random(1,num_files);
+        local file = file_names[rand_index];
+        local image_path = val_image_dir .. file
+        local im = image.load(image_path,3);
+        local im_size = im:size();
+        im_batch[count] = im:reshape(1,im_size[1],im_size[2],im_size[3])
+        -- else
+        --     count = count -1
+        -- end    
+    end
+    return im_batch
+end
+
+--------------------------------------------------------
+-- Stack 3 intensity y channels to make rgb
+--------------------------------------------------------
+function y2rgb(y_temp)
+    im_y = torch.cat(y_temp,y_temp,1);
+    im_y = torch.cat(im_y,y_temp,1);
+    return im_y
+end
+
