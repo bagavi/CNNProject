@@ -11,7 +11,7 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-3590 1204,-3590 1204,4 -4,4"/>
 <!-- n1 -->
 <g id="node1" class="node"><title>n1</title>
-<g id="a_node1"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:24_">
+<g id="a_node1"><a xlink:title="[./Net2.lua]:85_">
 <ellipse fill="none" stroke="purple" cx="258" cy="-160" rx="149.36" ry="48.1667"/>
 <text text-anchor="middle" x="258" y="-178.8" font-family="Times,serif" font-size="14.00">Final Layer (1)</text>
 <text text-anchor="middle" x="258" y="-163.8" font-family="Times,serif" font-size="14.00">desc = Final output. Using Sigmoid</text>
@@ -37,7 +37,7 @@
 </g>
 <!-- n3 -->
 <g id="node3" class="node"><title>n3</title>
-<g id="a_node3"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:24_">
+<g id="a_node3"><a xlink:title="[./Net2.lua]:85_">
 <ellipse fill="none" stroke="black" cx="258" cy="-282" rx="228.093" ry="37.4533"/>
 <text text-anchor="middle" x="258" y="-293.3" font-family="Times,serif" font-size="14.00">Node3</text>
 <text text-anchor="start" x="104.5" y="-278.3" font-family="Times,serif" font-size="14.00">module = nn.SpatialConvolution(64 &#45;&gt; 2, 3x3, 1,1, 1,1)</text>
@@ -52,7 +52,7 @@
 </g>
 <!-- n4 -->
 <g id="node4" class="node"><title>n4</title>
-<g id="a_node4"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:22_">
+<g id="a_node4"><a xlink:title="[./Net2.lua]:83_">
 <ellipse fill="none" stroke="black" cx="258" cy="-394" rx="171.241" ry="37.4533"/>
 <text text-anchor="middle" x="258" y="-405.3" font-family="Times,serif" font-size="14.00">Node4</text>
 <text text-anchor="start" x="144.5" y="-390.3" font-family="Times,serif" font-size="14.00">module = nn.SpatialMaxPooling(2,2,2,2)</text>
@@ -67,7 +67,7 @@
 </g>
 <!-- n5 -->
 <g id="node5" class="node"><title>n5</title>
-<g id="a_node5"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:22_">
+<g id="a_node5"><a xlink:title="[./Net2.lua]:83_">
 <ellipse fill="none" stroke="black" cx="258" cy="-506" rx="87.5215" ry="37.4533"/>
 <text text-anchor="middle" x="258" y="-517.3" font-family="Times,serif" font-size="14.00">Node5</text>
 <text text-anchor="start" x="204" y="-502.3" font-family="Times,serif" font-size="14.00">module = nn.ReLU</text>
@@ -82,7 +82,7 @@
 </g>
 <!-- n6 -->
 <g id="node6" class="node"><title>n6</title>
-<g id="a_node6"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:21_">
+<g id="a_node6"><a xlink:title="[./Net2.lua]:82_">
 <ellipse fill="none" stroke="black" cx="258" cy="-618" rx="168.498" ry="37.4533"/>
 <text text-anchor="middle" x="258" y="-629.3" font-family="Times,serif" font-size="14.00">Node6</text>
 <text text-anchor="start" x="146.5" y="-614.3" font-family="Times,serif" font-size="14.00">module = nn.SpatialBatchNormalization</text>
@@ -97,7 +97,7 @@
 </g>
 <!-- n7 -->
 <g id="node7" class="node"><title>n7</title>
-<g id="a_node7"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:21_">
+<g id="a_node7"><a xlink:title="[./Net2.lua]:82_">
 <ellipse fill="none" stroke="black" cx="258" cy="-730" rx="232.457" ry="37.4533"/>
 <text text-anchor="middle" x="258" y="-741.3" font-family="Times,serif" font-size="14.00">Node7</text>
 <text text-anchor="start" x="101.5" y="-726.3" font-family="Times,serif" font-size="14.00">module = nn.SpatialConvolution(32 &#45;&gt; 64, 3x3, 1,1, 1,1)</text>
@@ -112,7 +112,7 @@
 </g>
 <!-- n8 -->
 <g id="node8" class="node"><title>n8</title>
-<g id="a_node8"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:19_">
+<g id="a_node8"><a xlink:title="[./Net2.lua]:80_">
 <ellipse fill="none" stroke="black" cx="258" cy="-842" rx="171.241" ry="37.4533"/>
 <text text-anchor="middle" x="258" y="-853.3" font-family="Times,serif" font-size="14.00">Node8</text>
 <text text-anchor="start" x="144.5" y="-838.3" font-family="Times,serif" font-size="14.00">module = nn.SpatialMaxPooling(2,2,2,2)</text>
@@ -127,7 +127,7 @@
 </g>
 <!-- n9 -->
 <g id="node9" class="node"><title>n9</title>
-<g id="a_node9"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:19_">
+<g id="a_node9"><a xlink:title="[./Net2.lua]:80_">
 <ellipse fill="none" stroke="black" cx="258" cy="-954" rx="87.5215" ry="37.4533"/>
 <text text-anchor="middle" x="258" y="-965.3" font-family="Times,serif" font-size="14.00">Node9</text>
 <text text-anchor="start" x="204" y="-950.3" font-family="Times,serif" font-size="14.00">module = nn.ReLU</text>
@@ -142,7 +142,7 @@
 </g>
 <!-- n10 -->
 <g id="node10" class="node"><title>n10</title>
-<g id="a_node10"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:18_">
+<g id="a_node10"><a xlink:title="[./Net2.lua]:79_">
 <ellipse fill="none" stroke="black" cx="258" cy="-1066" rx="168.498" ry="37.4533"/>
 <text text-anchor="middle" x="258" y="-1077.3" font-family="Times,serif" font-size="14.00">Node10</text>
 <text text-anchor="start" x="146.5" y="-1062.3" font-family="Times,serif" font-size="14.00">module = nn.SpatialBatchNormalization</text>
@@ -157,7 +157,7 @@
 </g>
 <!-- n11 -->
 <g id="node11" class="node"><title>n11</title>
-<g id="a_node11"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:18_">
+<g id="a_node11"><a xlink:title="[./Net2.lua]:79_">
 <ellipse fill="none" stroke="black" cx="258" cy="-1178" rx="232.457" ry="37.4533"/>
 <text text-anchor="middle" x="258" y="-1189.3" font-family="Times,serif" font-size="14.00">Node11</text>
 <text text-anchor="start" x="101.5" y="-1174.3" font-family="Times,serif" font-size="14.00">module = nn.SpatialConvolution(99 &#45;&gt; 32, 3x3, 1,1, 1,1)</text>
@@ -172,13 +172,13 @@
 </g>
 <!-- n12 -->
 <g id="node12" class="node"><title>n12</title>
-<g id="a_node12"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:11_">
+<g id="a_node12"><a xlink:title="[./Net2.lua]:72_">
 <ellipse fill="none" stroke="grey" cx="258" cy="-1311" rx="258.202" ry="58.8803"/>
 <text text-anchor="middle" x="258" y="-1337.3" font-family="Times,serif" font-size="14.00">Joining layer (12)</text>
 <text text-anchor="middle" x="258" y="-1322.3" font-family="Times,serif" font-size="14.00">desc = Joining input, level1, deconved_level3, deconved_level6</text>
 <text text-anchor="start" x="83" y="-1307.3" font-family="Times,serif" font-size="14.00">module = nn.JoinTable</text>
-<text text-anchor="start" x="83" y="-1292.3" font-family="Times,serif" font-size="14.00">reverseMap = {}</text>
-<text text-anchor="middle" x="258" y="-1277.3" font-family="Times,serif" font-size="14.00">mapindex = {Node13,Node14,Node15,Node16}</text>
+<text text-anchor="start" x="83" y="-1292.3" font-family="Times,serif" font-size="14.00">mapindex = {Node13,Node14,Node15,Node16}</text>
+<text text-anchor="middle" x="258" y="-1277.3" font-family="Times,serif" font-size="14.00">reverseMap = {}</text>
 </a>
 </g>
 </g>
@@ -189,7 +189,7 @@
 </g>
 <!-- n13 -->
 <g id="node13" class="node"><title>n13</title>
-<g id="a_node13"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:1_">
+<g id="a_node13"><a xlink:title="[./Net2.lua]:11_">
 <ellipse fill="none" stroke="green" cx="328" cy="-3426" rx="98.4924" ry="48.1667"/>
 <text text-anchor="middle" x="328" y="-3444.8" font-family="Times,serif" font-size="14.00">Conv Layer 1 (13)</text>
 <text text-anchor="middle" x="328" y="-3429.8" font-family="Times,serif" font-size="14.00">desc = Image Features</text>
@@ -205,7 +205,7 @@
 </g>
 <!-- n21 -->
 <g id="node21" class="node"><title>n21</title>
-<g id="a_node21"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:22_">
+<g id="a_node21"><a xlink:title="[./Net2.lua]:32_">
 <ellipse fill="none" stroke="red" cx="458" cy="-3294" rx="228.093" ry="48.1667"/>
 <text text-anchor="middle" x="458" y="-3312.8" font-family="Times,serif" font-size="14.00">Conv Layer 1 (21)</text>
 <text text-anchor="middle" x="458" y="-3297.8" font-family="Times,serif" font-size="14.00">desc = Image Features</text>
@@ -221,7 +221,7 @@
 </g>
 <!-- n14 -->
 <g id="node14" class="node"><title>n14</title>
-<g id="a_node14"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:26_">
+<g id="a_node14"><a xlink:title="[./Net2.lua]:36_">
 <ellipse fill="none" stroke="blue" cx="461" cy="-3050" rx="232.457" ry="48.1667"/>
 <text text-anchor="middle" x="461" y="-3068.8" font-family="Times,serif" font-size="14.00">Conv Layer 2 (14)</text>
 <text text-anchor="middle" x="461" y="-3053.8" font-family="Times,serif" font-size="14.00">desc = Image Features</text>
@@ -237,7 +237,7 @@
 </g>
 <!-- n28 -->
 <g id="node28" class="node"><title>n28</title>
-<g id="a_node28"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:30_">
+<g id="a_node28"><a xlink:title="[./Net2.lua]:40_">
 <ellipse fill="none" stroke="black" cx="472" cy="-2928" rx="87.5215" ry="37.4533"/>
 <text text-anchor="middle" x="472" y="-2939.3" font-family="Times,serif" font-size="14.00">Node28</text>
 <text text-anchor="start" x="418" y="-2924.3" font-family="Times,serif" font-size="14.00">module = nn.ReLU</text>
@@ -252,7 +252,7 @@
 </g>
 <!-- n15 -->
 <g id="node15" class="node"><title>n15</title>
-<g id="a_node15"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:3_">
+<g id="a_node15"><a xlink:title="[./Net2.lua]:64_">
 <ellipse fill="none" stroke="yellow" cx="519" cy="-2206" rx="253.216" ry="48.1667"/>
 <text text-anchor="middle" x="519" y="-2224.8" font-family="Times,serif" font-size="14.00">Deconving level 3 (15)</text>
 <text text-anchor="middle" x="519" y="-2209.8" font-family="Times,serif" font-size="14.00">desc = To increase the dimension</text>
@@ -268,7 +268,7 @@
 </g>
 <!-- n16 -->
 <g id="node16" class="node"><title>n16</title>
-<g id="a_node16"><a xlink:title="[[string &quot;dimension = 2...&quot;]]:7_">
+<g id="a_node16"><a xlink:title="[./Net2.lua]:68_">
 <ellipse fill="none" stroke="yellow" cx="566" cy="-1454" rx="253.216" ry="48.1667"/>
 <text text-anchor="middle" x="566" y="-1472.8" font-family="Times,serif" font-size="14.00">Deconving level 6 (16)</text>
 <text text-anchor="middle" x="566" y="-1457.8" font-family="Times,serif" font-size="14.00">desc = To increase the dimension</text>
@@ -299,7 +299,7 @@
 </g>
 <!-- n18 -->
 <g id="node18" class="node"><title>n18</title>
-<g id="a_node18"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:26_">
+<g id="a_node18"><a xlink:title="[./Net2.lua]:36_">
 <ellipse fill="none" stroke="black" cx="459" cy="-3172" rx="87.5215" ry="37.4533"/>
 <text text-anchor="middle" x="459" y="-3183.3" font-family="Times,serif" font-size="14.00">Node18</text>
 <text text-anchor="start" x="405" y="-3168.3" font-family="Times,serif" font-size="14.00">module = nn.ReLU</text>
@@ -314,7 +314,7 @@
 </g>
 <!-- n19 -->
 <g id="node19" class="node"><title>n19</title>
-<g id="a_node19"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:34_">
+<g id="a_node19"><a xlink:title="[./Net2.lua]:44_">
 <ellipse fill="none" stroke="blue" cx="519" cy="-2450" rx="242.306" ry="48.1667"/>
 <text text-anchor="middle" x="519" y="-2468.8" font-family="Times,serif" font-size="14.00">Conv Layer 3 (19)</text>
 <text text-anchor="middle" x="519" y="-2453.8" font-family="Times,serif" font-size="14.00">desc = Image Features</text>
@@ -330,7 +330,7 @@
 </g>
 <!-- n31 -->
 <g id="node31" class="node"><title>n31</title>
-<g id="a_node31"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:38_">
+<g id="a_node31"><a xlink:title="[./Net2.lua]:48_">
 <ellipse fill="none" stroke="black" cx="798" cy="-2328" rx="87.5215" ry="37.4533"/>
 <text text-anchor="middle" x="798" y="-2339.3" font-family="Times,serif" font-size="14.00">Node31</text>
 <text text-anchor="start" x="744" y="-2324.3" font-family="Times,serif" font-size="14.00">module = nn.ReLU</text>
@@ -345,7 +345,7 @@
 </g>
 <!-- n20 -->
 <g id="node20" class="node"><title>n20</title>
-<g id="a_node20"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:46_">
+<g id="a_node20"><a xlink:title="[./Net2.lua]:56_">
 <ellipse fill="none" stroke="blue" cx="579" cy="-1586" rx="242.306" ry="48.1667"/>
 <text text-anchor="middle" x="579" y="-1604.8" font-family="Times,serif" font-size="14.00">Conv Layer 3 (20)</text>
 <text text-anchor="middle" x="579" y="-1589.8" font-family="Times,serif" font-size="14.00">desc = Image Features</text>
@@ -366,7 +366,7 @@
 </g>
 <!-- n22 -->
 <g id="node22" class="node"><title>n22</title>
-<g id="a_node22"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:34_">
+<g id="a_node22"><a xlink:title="[./Net2.lua]:44_">
 <ellipse fill="none" stroke="black" cx="515" cy="-2572" rx="87.5215" ry="37.4533"/>
 <text text-anchor="middle" x="515" y="-2583.3" font-family="Times,serif" font-size="14.00">Node22</text>
 <text text-anchor="start" x="461" y="-2568.3" font-family="Times,serif" font-size="14.00">module = nn.ReLU</text>
@@ -381,7 +381,7 @@
 </g>
 <!-- n23 -->
 <g id="node23" class="node"><title>n23</title>
-<g id="a_node23"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:46_">
+<g id="a_node23"><a xlink:title="[./Net2.lua]:56_">
 <ellipse fill="none" stroke="black" cx="604" cy="-1708" rx="87.5215" ry="37.4533"/>
 <text text-anchor="middle" x="604" y="-1719.3" font-family="Times,serif" font-size="14.00">Node23</text>
 <text text-anchor="start" x="550" y="-1704.3" font-family="Times,serif" font-size="14.00">module = nn.ReLU</text>
@@ -396,7 +396,7 @@
 </g>
 <!-- n24 -->
 <g id="node24" class="node"><title>n24</title>
-<g id="a_node24"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:30_">
+<g id="a_node24"><a xlink:title="[./Net2.lua]:40_">
 <ellipse fill="none" stroke="red" cx="511" cy="-2694" rx="237.382" ry="48.1667"/>
 <text text-anchor="middle" x="511" y="-2712.8" font-family="Times,serif" font-size="14.00">Conv Layer 3 (24)</text>
 <text text-anchor="middle" x="511" y="-2697.8" font-family="Times,serif" font-size="14.00">desc = Image Features</text>
@@ -412,7 +412,7 @@
 </g>
 <!-- n25 -->
 <g id="node25" class="node"><title>n25</title>
-<g id="a_node25"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:42_">
+<g id="a_node25"><a xlink:title="[./Net2.lua]:52_">
 <ellipse fill="none" stroke="red" cx="655" cy="-1830" rx="242.306" ry="48.1667"/>
 <text text-anchor="middle" x="655" y="-1848.8" font-family="Times,serif" font-size="14.00">Conv Layer 3 (25)</text>
 <text text-anchor="middle" x="655" y="-1833.8" font-family="Times,serif" font-size="14.00">desc = Image Features</text>
@@ -428,7 +428,7 @@
 </g>
 <!-- n26 -->
 <g id="node26" class="node"><title>n26</title>
-<g id="a_node26"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:30_">
+<g id="a_node26"><a xlink:title="[./Net2.lua]:40_">
 <ellipse fill="none" stroke="black" cx="493" cy="-2816" rx="171.241" ry="37.4533"/>
 <text text-anchor="middle" x="493" y="-2827.3" font-family="Times,serif" font-size="14.00">Node26</text>
 <text text-anchor="start" x="379.5" y="-2812.3" font-family="Times,serif" font-size="14.00">module = nn.SpatialMaxPooling(2,2,2,2)</text>
@@ -443,7 +443,7 @@
 </g>
 <!-- n27 -->
 <g id="node27" class="node"><title>n27</title>
-<g id="a_node27"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:42_">
+<g id="a_node27"><a xlink:title="[./Net2.lua]:52_">
 <ellipse fill="none" stroke="black" cx="756" cy="-1952" rx="87.5215" ry="37.4533"/>
 <text text-anchor="middle" x="756" y="-1963.3" font-family="Times,serif" font-size="14.00">Node27</text>
 <text text-anchor="start" x="702" y="-1948.3" font-family="Times,serif" font-size="14.00">module = nn.ReLU</text>
@@ -463,7 +463,7 @@
 </g>
 <!-- n29 -->
 <g id="node29" class="node"><title>n29</title>
-<g id="a_node29"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:38_">
+<g id="a_node29"><a xlink:title="[./Net2.lua]:48_">
 <ellipse fill="none" stroke="red" cx="958" cy="-2074" rx="242.306" ry="48.1667"/>
 <text text-anchor="middle" x="958" y="-2092.8" font-family="Times,serif" font-size="14.00">Conv Layer 3 (29)</text>
 <text text-anchor="middle" x="958" y="-2077.8" font-family="Times,serif" font-size="14.00">desc = Image Features</text>
@@ -479,7 +479,7 @@
 </g>
 <!-- n30 -->
 <g id="node30" class="node"><title>n30</title>
-<g id="a_node30"><a xlink:title="[[string &quot;input = nn.Identity()():annotate{...&quot;]]:38_">
+<g id="a_node30"><a xlink:title="[./Net2.lua]:48_">
 <ellipse fill="none" stroke="black" cx="962" cy="-2206" rx="171.241" ry="37.4533"/>
 <text text-anchor="middle" x="962" y="-2217.3" font-family="Times,serif" font-size="14.00">Node30</text>
 <text text-anchor="start" x="848.5" y="-2202.3" font-family="Times,serif" font-size="14.00">module = nn.SpatialMaxPooling(2,2,2,2)</text>
