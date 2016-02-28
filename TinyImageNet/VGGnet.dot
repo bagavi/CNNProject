@@ -1,263 +1,208 @@
 digraph G {
-	graph [bb="0,0,484,4780"];
+	graph [bb="0,0,1200,3586"];
 	node [label="\N",
 		shape=oval
 	];
-	n1	 [height=1.041,
-		label="Node1\nmodule = nn.SoftMax\lreverseMap = {}",
-		pos="242,150",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:35_",
-		width=2.7262];
+	n1	 [color=purple,
+		height=1.3356,
+		label="Final Layer (1)\ndesc = Final output. Using Sigmoid\nmodule = nn.Sigmoid\lreverseMap = {}",
+		pos="258,160",
+		tooltip="[[string \"dimension = 2...\"]]:24_",
+		width=4.1515];
 	n2	 [height=1.041,
 		label="Node2\ninput = {}\lreverseMap = {}",
-		pos="242,38",
+		pos="258,38",
 		tooltip="[[C]]:-1_",
 		width=2.1497];
-	n1 -> n2	 [pos="e,242,75.844 242,112.37 242,103.93 242,94.829 242,86.011"];
+	n1 -> n2	 [pos="e,258,75.722 258,111.57 258,103.1 258,94.269 258,85.81"];
 	n3	 [height=1.041,
-		label="Node3\nmodule = nn.Linear(4096 -> 1000)\lreverseMap = {}",
-		pos="242,262",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:34_",
-		width=4.0942];
-	n3 -> n1	 [pos="e,242,187.84 242,224.37 242,215.93 242,206.83 242,198.01"];
+		label="Node3\nmodule = nn.SpatialConvolution(64 -> 2, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="258,282",
+		tooltip="[[string \"dimension = 2...\"]]:24_",
+		width=6.3388];
+	n3 -> n1	 [pos="e,258,208.5 258,244.34 258,236.22 258,227.42 258,218.68"];
 	n4	 [height=1.041,
-		label="Node4\nmodule = nn.Dropout(0.500000)\lreverseMap = {}",
-		pos="242,374",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:34_",
-		width=3.8416];
-	n4 -> n3	 [pos="e,242,299.84 242,336.37 242,327.93 242,318.83 242,310.01"];
+		label="Node4\nmodule = nn.SpatialMaxPooling(2,2,2,2)\lreverseMap = {}",
+		pos="258,394",
+		tooltip="[[string \"dimension = 2...\"]]:22_",
+		width=4.7615];
+	n4 -> n3	 [pos="e,258,319.84 258,356.37 258,347.93 258,338.83 258,330.01"];
 	n5	 [height=1.041,
 		label="Node5\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,486",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:34_",
+		pos="258,506",
+		tooltip="[[string \"dimension = 2...\"]]:22_",
 		width=2.4261];
-	n5 -> n4	 [pos="e,242,411.84 242,448.37 242,439.93 242,430.83 242,422.01"];
+	n5 -> n4	 [pos="e,258,431.84 258,468.37 258,459.93 258,450.83 258,442.01"];
 	n6	 [height=1.041,
-		label="Node6\nmodule = nn.Linear(4096 -> 4096)\lreverseMap = {}",
-		pos="242,598",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:33_",
-		width=4.0942];
-	n6 -> n5	 [pos="e,242,523.84 242,560.37 242,551.93 242,542.83 242,534.01"];
+		label="Node6\nmodule = nn.SpatialBatchNormalization\lreverseMap = {}",
+		pos="258,618",
+		tooltip="[[string \"dimension = 2...\"]]:21_",
+		width=4.6805];
+	n6 -> n5	 [pos="e,258,543.84 258,580.37 258,571.93 258,562.83 258,554.01"];
 	n7	 [height=1.041,
-		label="Node7\nmodule = nn.Dropout(0.500000)\lreverseMap = {}",
-		pos="242,710",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:33_",
-		width=3.8416];
-	n7 -> n6	 [pos="e,242,635.84 242,672.37 242,663.93 242,654.83 242,646.01"];
+		label="Node7\nmodule = nn.SpatialConvolution(32 -> 64, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="258,730",
+		tooltip="[[string \"dimension = 2...\"]]:21_",
+		width=6.4533];
+	n7 -> n6	 [pos="e,258,655.84 258,692.37 258,683.93 258,674.83 258,666.01"];
 	n8	 [height=1.041,
-		label="Node8\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,822",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:33_",
-		width=2.4261];
-	n8 -> n7	 [pos="e,242,747.84 242,784.37 242,775.93 242,766.83 242,758.01"];
+		label="Node8\nmodule = nn.SpatialMaxPooling(2,2,2,2)\lreverseMap = {}",
+		pos="258,842",
+		tooltip="[[string \"dimension = 2...\"]]:19_",
+		width=4.7615];
+	n8 -> n7	 [pos="e,258,767.84 258,804.37 258,795.93 258,786.83 258,778.01"];
 	n9	 [height=1.041,
-		label="Node9\nmodule = nn.Linear(25088 -> 4096)\lreverseMap = {}",
-		pos="242,934",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:32_",
-		width=4.2324];
-	n9 -> n8	 [pos="e,242,859.84 242,896.37 242,887.93 242,878.83 242,870.01"];
+		label="Node9\nmodule = nn.ReLU\lreverseMap = {}",
+		pos="258,954",
+		tooltip="[[string \"dimension = 2...\"]]:19_",
+		width=2.4261];
+	n9 -> n8	 [pos="e,258,879.84 258,916.37 258,907.93 258,898.83 258,890.01"];
 	n10	 [height=1.041,
-		label="Node10\nmodule = nn.View(-1)\lreverseMap = {}",
-		pos="242,1046",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:32_",
-		width=2.736];
-	n10 -> n9	 [pos="e,242,971.84 242,1008.4 242,999.93 242,990.83 242,982.01"];
+		label="Node10\nmodule = nn.SpatialBatchNormalization\lreverseMap = {}",
+		pos="258,1066",
+		tooltip="[[string \"dimension = 2...\"]]:18_",
+		width=4.6805];
+	n10 -> n9	 [pos="e,258,991.84 258,1028.4 258,1019.9 258,1010.8 258,1002"];
 	n11	 [height=1.041,
-		label="Node11\nmodule = nn.SpatialMaxPooling(2,2,2,2)\lreverseMap = {}",
-		pos="242,1158",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:32_",
-		width=4.7615];
-	n11 -> n10	 [pos="e,242,1083.8 242,1120.4 242,1111.9 242,1102.8 242,1094"];
-	n12	 [height=1.041,
-		label="Node12\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,1270",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:32_",
-		width=2.4261];
-	n12 -> n11	 [pos="e,242,1195.8 242,1232.4 242,1223.9 242,1214.8 242,1206"];
-	n13	 [height=1.041,
-		label="Node13\nmodule = nn.SpatialConvolution(512 -> 512, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,1382",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:31_",
-		width=6.7297];
-	n13 -> n12	 [pos="e,242,1307.8 242,1344.4 242,1335.9 242,1326.8 242,1318"];
-	n14	 [height=1.041,
-		label="Node14\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,1494",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:31_",
-		width=2.4261];
-	n14 -> n13	 [pos="e,242,1419.8 242,1456.4 242,1447.9 242,1438.8 242,1430"];
-	n15	 [height=1.041,
-		label="Node15\nmodule = nn.SpatialConvolution(512 -> 512, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,1606",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:30_",
-		width=6.7297];
-	n15 -> n14	 [pos="e,242,1531.8 242,1568.4 242,1559.9 242,1550.8 242,1542"];
-	n16	 [height=1.041,
-		label="Node16\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,1718",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:30_",
-		width=2.4261];
-	n16 -> n15	 [pos="e,242,1643.8 242,1680.4 242,1671.9 242,1662.8 242,1654"];
-	n17	 [height=1.041,
-		label="Node17\nmodule = nn.SpatialConvolution(512 -> 512, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,1830",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:29_",
-		width=6.7297];
-	n17 -> n16	 [pos="e,242,1755.8 242,1792.4 242,1783.9 242,1774.8 242,1766"];
-	n18	 [height=1.041,
-		label="Node18\nmodule = nn.SpatialMaxPooling(2,2,2,2)\lreverseMap = {}",
-		pos="242,1942",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:29_",
-		width=4.7615];
-	n18 -> n17	 [pos="e,242,1867.8 242,1904.4 242,1895.9 242,1886.8 242,1878"];
-	n19	 [height=1.041,
-		label="Node19\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,2054",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:29_",
-		width=2.4261];
-	n19 -> n18	 [pos="e,242,1979.8 242,2016.4 242,2007.9 242,1998.8 242,1990"];
-	n20	 [height=1.041,
-		label="Node20\nmodule = nn.SpatialConvolution(512 -> 512, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,2166",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:28_",
-		width=6.7297];
-	n20 -> n19	 [pos="e,242,2091.8 242,2128.4 242,2119.9 242,2110.8 242,2102"];
-	n21	 [height=1.041,
-		label="Node21\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,2278",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:28_",
-		width=2.4261];
-	n21 -> n20	 [pos="e,242,2203.8 242,2240.4 242,2231.9 242,2222.8 242,2214"];
-	n22	 [height=1.041,
-		label="Node22\nmodule = nn.SpatialConvolution(512 -> 512, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,2390",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:27_",
-		width=6.7297];
-	n22 -> n21	 [pos="e,242,2315.8 242,2352.4 242,2343.9 242,2334.8 242,2326"];
-	n23	 [height=1.041,
-		label="Node23\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,2502",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:27_",
-		width=2.4261];
-	n23 -> n22	 [pos="e,242,2427.8 242,2464.4 242,2455.9 242,2446.8 242,2438"];
-	n24	 [height=1.041,
-		label="Node24\nmodule = nn.SpatialConvolution(256 -> 512, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,2614",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:26_",
-		width=6.7297];
-	n24 -> n23	 [pos="e,242,2539.8 242,2576.4 242,2567.9 242,2558.8 242,2550"];
-	n25	 [height=1.041,
-		label="Node25\nmodule = nn.SpatialMaxPooling(2,2,2,2)\lreverseMap = {}",
-		pos="242,2726",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:26_",
-		width=4.7615];
-	n25 -> n24	 [pos="e,242,2651.8 242,2688.4 242,2679.9 242,2670.8 242,2662"];
-	n26	 [height=1.041,
-		label="Node26\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,2838",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:26_",
-		width=2.4261];
-	n26 -> n25	 [pos="e,242,2763.8 242,2800.4 242,2791.9 242,2782.8 242,2774"];
-	n27	 [height=1.041,
-		label="Node27\nmodule = nn.SpatialConvolution(256 -> 256, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,2950",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:25_",
-		width=6.7297];
-	n27 -> n26	 [pos="e,242,2875.8 242,2912.4 242,2903.9 242,2894.8 242,2886"];
+		label="Node11\nmodule = nn.SpatialConvolution(99 -> 32, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="258,1178",
+		tooltip="[[string \"dimension = 2...\"]]:18_",
+		width=6.4533];
+	n11 -> n10	 [pos="e,258,1103.8 258,1140.4 258,1131.9 258,1122.8 258,1114"];
+	n12	 [color=grey,
+		height=1.6303,
+		label="Joining layer (12)\ndesc = Joining input, level1, deconved_level3, deconved_level6\nmodule = nn.JoinTable\lreverseMap = {}\lmapindex = {\
+Node13,Node14,Node15,Node16}",
+		pos="258,1311",
+		tooltip="[[string \"dimension = 2...\"]]:11_",
+		width=7.1778];
+	n12 -> n11	 [pos="e,258,1215.8 258,1252.2 258,1243.4 258,1234.4 258,1225.9"];
+	n13	 [color=green,
+		height=1.3356,
+		label="Conv Layer 1 (13)\ndesc = Image Features\nmodule = nn.Identity\lreverseMap = {}",
+		pos="328,3426",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:1_",
+		width=2.736];
+	n13 -> n12	 [pos="e,238.44,1369.6 264.86,3389 247.98,3376.3 231.52,3360.5 221,3342 183.57,3276.2 200,3248.7 200,3173 200,3173 200,3173 200,1585 200,\
+1513.6 219.23,1433.9 235.54,1379.1"];
+	n21	 [color=red,
+		height=1.3356,
+		label="Conv Layer 1 (21)\ndesc = Image Features\nmodule = nn.SpatialConvolution(3 -> 64, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="458,3294",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:22_",
+		width=6.3388];
+	n13 -> n21	 [pos="e,411.75,3341.3 370.57,3382.4 381.38,3371.6 393.14,3359.9 404.42,3348.6"];
+	n14	 [color=blue,
+		height=1.3356,
+		label="Conv Layer 2 (14)\ndesc = Image Features\nmodule = nn.SpatialConvolution(64 -> 64, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="461,3050",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:26_",
+		width=6.4533];
+	n14 -> n12	 [pos="e,251.31,1369.7 377.01,3005.1 313.8,2965.4 238,2900.4 238,2817 238,2817 238,2817 238,1585 238,1514.9 244.65,1434.9 250.27,1379.7"];
 	n28	 [height=1.041,
 		label="Node28\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,3062",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:25_",
+		pos="472,2928",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:30_",
 		width=2.4261];
-	n28 -> n27	 [pos="e,242,2987.8 242,3024.4 242,3015.9 242,3006.8 242,2998"];
-	n29	 [height=1.041,
-		label="Node29\nmodule = nn.SpatialConvolution(256 -> 256, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,3174",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:24_",
-		width=6.7297];
-	n29 -> n28	 [pos="e,242,3099.8 242,3136.4 242,3127.9 242,3118.8 242,3110"];
-	n30	 [height=1.041,
-		label="Node30\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,3286",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:24_",
-		width=2.4261];
-	n30 -> n29	 [pos="e,242,3211.8 242,3248.4 242,3239.9 242,3230.8 242,3222"];
-	n31	 [height=1.041,
-		label="Node31\nmodule = nn.SpatialConvolution(128 -> 256, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,3398",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:23_",
-		width=6.7297];
-	n31 -> n30	 [pos="e,242,3323.8 242,3360.4 242,3351.9 242,3342.8 242,3334"];
-	n32	 [height=1.041,
-		label="Node32\nmodule = nn.SpatialMaxPooling(2,2,2,2)\lreverseMap = {}",
-		pos="242,3510",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:23_",
-		width=4.7615];
-	n32 -> n31	 [pos="e,242,3435.8 242,3472.4 242,3463.9 242,3454.8 242,3446"];
-	n33	 [height=1.041,
-		label="Node33\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,3622",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:23_",
-		width=2.4261];
-	n33 -> n32	 [pos="e,242,3547.8 242,3584.4 242,3575.9 242,3566.8 242,3558"];
-	n34	 [height=1.041,
-		label="Node34\nmodule = nn.SpatialConvolution(128 -> 128, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,3734",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:22_",
-		width=6.7297];
-	n34 -> n33	 [pos="e,242,3659.8 242,3696.4 242,3687.9 242,3678.8 242,3670"];
-	n35	 [height=1.041,
-		label="Node35\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,3846",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:22_",
-		width=2.4261];
-	n35 -> n34	 [pos="e,242,3771.8 242,3808.4 242,3799.9 242,3790.8 242,3782"];
-	n36	 [height=1.041,
-		label="Node36\nmodule = nn.SpatialConvolution(64 -> 128, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,3958",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:21_",
-		width=6.5915];
-	n36 -> n35	 [pos="e,242,3883.8 242,3920.4 242,3911.9 242,3902.8 242,3894"];
-	n37	 [height=1.041,
-		label="Node37\nmodule = nn.SpatialMaxPooling(2,2,2,2)\lreverseMap = {}",
-		pos="242,4070",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:21_",
-		width=4.7615];
-	n37 -> n36	 [pos="e,242,3995.8 242,4032.4 242,4023.9 242,4014.8 242,4006"];
-	n38	 [height=1.041,
-		label="Node38\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,4182",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:21_",
-		width=2.4261];
-	n38 -> n37	 [pos="e,242,4107.8 242,4144.4 242,4135.9 242,4126.8 242,4118"];
-	n39	 [height=1.041,
-		label="Node39\nmodule = nn.SpatialConvolution(64 -> 64, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,4294",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:20_",
-		width=6.4533];
-	n39 -> n38	 [pos="e,242,4219.8 242,4256.4 242,4247.9 242,4238.8 242,4230"];
-	n40	 [height=1.041,
-		label="Node40\nmodule = nn.ReLU\lreverseMap = {}",
-		pos="242,4406",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:20_",
-		width=2.4261];
-	n40 -> n39	 [pos="e,242,4331.8 242,4368.4 242,4359.9 242,4350.8 242,4342"];
-	n41	 [height=1.041,
-		label="Node41\nmodule = nn.SpatialConvolution(3 -> 64, 3x3, 1,1, 1,1)\lreverseMap = {}",
-		pos="242,4518",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:19_",
-		width=6.3388];
-	n41 -> n40	 [pos="e,242,4443.8 242,4480.4 242,4471.9 242,4462.8 242,4454"];
-	n42	 [height=1.041,
-		label="Node42\nmodule = nn.Identity\lreverseMap = {}",
-		pos="242,4630",
-		tooltip="[[string \"input = nn.Identity()()...\"]]:1_",
-		width=2.6117];
-	n42 -> n41	 [pos="e,242,4555.8 242,4592.4 242,4583.9 242,4574.8 242,4566"];
-	n43	 [height=1.041,
-		label="Node43\ninput = {}\lreverseMap = {}",
-		pos="242,4742",
+	n14 -> n28	 [pos="e,468.65,2965.6 465.32,3001.9 466.1,2993.3 466.92,2984.4 467.71,2975.8"];
+	n15	 [color=yellow,
+		height=1.3356,
+		label="Deconving level 3 (15)\ndesc = To increase the dimension\nmodule = nn.SpatialFullConvolution(128 -> 16, 1x1, 2,2, 1,1)\lreverseMap = {}",
+		pos="519,2206",
+		tooltip="[[string \"dimension = 2...\"]]:3_",
+		width=7.0298];
+	n15 -> n12	 [pos="e,265.02,1369.7 434.05,2160.5 365.01,2117.6 279,2045.6 279,1953 279,1953 279,1953 279,1585 279,1514.9 272.02,1434.9 266.11,1379.7"];
+	n16	 [color=yellow,
+		height=1.3356,
+		label="Deconving level 6 (16)\ndesc = To increase the dimension\nmodule = nn.SpatialFullConvolution(256 -> 16, 2x2, 4,4, 2,2)\lreverseMap = {}",
+		pos="566,1454",
+		tooltip="[[string \"dimension = 2...\"]]:7_",
+		width=7.0298];
+	n16 -> n12	 [pos="e,371.27,1363.9 470.66,1409.4 442.16,1396.3 410.51,1381.8 380.52,1368.1"];
+	n17	 [height=1.041,
+		label="Node17\ninput = {}\lreverseMap = {}",
+		pos="328,3548",
 		tooltip="[[C]]:-1_",
 		width=2.1497];
-	n43 -> n42	 [pos="e,242,4667.8 242,4704.4 242,4695.9 242,4686.8 242,4678"];
+	n17 -> n13	 [pos="e,328,3474.5 328,3510.3 328,3502.2 328,3493.4 328,3484.7"];
+	n18	 [height=1.041,
+		label="Node18\nmodule = nn.ReLU\lreverseMap = {}",
+		pos="459,3172",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:26_",
+		width=2.4261];
+	n18 -> n14	 [pos="e,460.21,3098.5 459.61,3134.3 459.75,3126.2 459.89,3117.4 460.04,3108.7"];
+	n19	 [color=blue,
+		height=1.3356,
+		label="Conv Layer 3 (19)\ndesc = Image Features\nmodule = nn.SpatialConvolution(128 -> 128, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="519,2450",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:34_",
+		width=6.7297];
+	n19 -> n15	 [pos="e,519,2254.1 519,2401.8 519,2362.4 519,2306.1 519,2264.2"];
+	n31	 [height=1.041,
+		label="Node31\nmodule = nn.ReLU\lreverseMap = {}",
+		pos="798,2328",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:38_",
+		width=2.4261];
+	n19 -> n31	 [pos="e,737.26,2355.1 618.94,2406 654.94,2390.5 694.78,2373.4 727.72,2359.2"];
+	n20	 [color=blue,
+		height=1.3356,
+		label="Conv Layer 3 (20)\ndesc = Image Features\nmodule = nn.SpatialConvolution(256 -> 256, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="579,1586",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:46_",
+		width=6.7297];
+	n20 -> n16	 [pos="e,570.75,1502.5 574.27,1537.7 573.45,1529.5 572.6,1521 571.76,1512.6"];
+	n21 -> n18	 [pos="e,458.69,3209.7 458.4,3245.6 458.47,3237.1 458.54,3228.3 458.61,3219.8"];
+	n22	 [height=1.041,
+		label="Node22\nmodule = nn.ReLU\lreverseMap = {}",
+		pos="515,2572",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:34_",
+		width=2.4261];
+	n22 -> n19	 [pos="e,517.42,2498.5 516.22,2534.3 516.49,2526.2 516.79,2517.4 517.08,2508.7"];
+	n23	 [height=1.041,
+		label="Node23\nmodule = nn.ReLU\lreverseMap = {}",
+		pos="604,1708",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:46_",
+		width=2.4261];
+	n23 -> n20	 [pos="e,588.81,1634.1 596.36,1670.3 594.63,1662 592.75,1653 590.89,1644.1"];
+	n24	 [color=red,
+		height=1.3356,
+		label="Conv Layer 3 (24)\ndesc = Image Features\nmodule = nn.SpatialConvolution(64 -> 128, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="511,2694",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:30_",
+		width=6.5915];
+	n24 -> n22	 [pos="e,513.78,2609.6 512.57,2645.9 512.86,2637.3 513.15,2628.4 513.44,2619.8"];
+	n25	 [color=red,
+		height=1.3356,
+		label="Conv Layer 3 (25)\ndesc = Image Features\nmodule = nn.SpatialConvolution(256 -> 256, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="655,1830",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:42_",
+		width=6.7297];
+	n25 -> n23	 [pos="e,619.38,1745.2 634.99,1781.9 631.18,1772.9 627.19,1763.6 623.4,1754.7"];
+	n26	 [height=1.041,
+		label="Node26\nmodule = nn.SpatialMaxPooling(2,2,2,2)\lreverseMap = {}",
+		pos="493,2816",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:30_",
+		width=4.7615];
+	n26 -> n24	 [pos="e,503.94,2742.1 498.5,2778.3 499.75,2770 501.1,2761 502.44,2752.1"];
+	n27	 [height=1.041,
+		label="Node27\nmodule = nn.ReLU\lreverseMap = {}",
+		pos="756,1952",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:42_",
+		width=2.4261];
+	n27 -> n25	 [pos="e,694.11,1877.5 727.06,1916.6 718.8,1906.8 709.6,1895.9 700.61,1885.2"];
+	n28 -> n26	 [pos="e,486.04,2853.5 478.99,2890.4 480.64,2881.7 482.42,2872.4 484.13,2863.4"];
+	n29	 [color=red,
+		height=1.3356,
+		label="Conv Layer 3 (29)\ndesc = Image Features\nmodule = nn.SpatialConvolution(128 -> 256, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="958,2074",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:38_",
+		width=6.7297];
+	n29 -> n27	 [pos="e,806.3,1982.9 882.5,2028.1 860.24,2014.9 836.21,2000.7 815.14,1988.1"];
+	n30	 [height=1.041,
+		label="Node30\nmodule = nn.SpatialMaxPooling(2,2,2,2)\lreverseMap = {}",
+		pos="962,2206",
+		tooltip="[[string \"input = nn.Identity()():annotate{...\"]]:38_",
+		width=4.7615];
+	n30 -> n29	 [pos="e,959.46,2122.5 960.88,2168.4 960.53,2157.3 960.15,2144.8 959.77,2132.6"];
+	n31 -> n30	 [pos="e,913.94,2242.2 841.52,2295.2 861.21,2280.8 884.72,2263.5 905.73,2248.2"];
 }
