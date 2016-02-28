@@ -18,4 +18,5 @@ After cloing the git repository. Download the following files in a 'Data' Folder
 4. Image package: https://github.com/torch/image
 5. nn module documentation: https://github.com/torch/nn/blob/master/doc/overview.md#nn.overview.dok
 6. https://github.com/torch/torch7 - The whole of Torch code.
- 
+7. torch-hdf5: https://github.com/deepmind/torch-hdf5
+8. How to save weights and biases of a trained network: add the gitter link  
