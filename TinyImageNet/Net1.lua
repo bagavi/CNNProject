@@ -87,6 +87,3 @@ function BasicConvNet1()
 end
 
 
-
-
-
