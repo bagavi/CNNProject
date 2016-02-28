@@ -104,6 +104,3 @@ function display_validation_results(VGG_net, shallow_net, opt)
                       image.scale(image.yuv2rgb(torch.cat(y_images[i],uv_images[i],1)),size,size)})
     end
 end
-
-
-
