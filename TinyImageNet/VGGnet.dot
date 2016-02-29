@@ -71,8 +71,8 @@ digraph G {
 	n11 -> n10	 [pos="e,258,1103.8 258,1140.4 258,1131.9 258,1122.8 258,1114"];
 	n12	 [color=grey,
 		height=1.6303,
-		label="Joining layer (12)\ndesc = Joining input, level1, deconved_level3, deconved_level6\nmodule = nn.JoinTable\lmapindex = {Node13,Node14,\
-Node15,Node16}\lreverseMap = {}",
+		label="Joining layer (12)\ndesc = Joining input, level1, deconved_level3, deconved_level6\nmodule = nn.JoinTable\lreverseMap = {}\lmapindex = {\
+Node13,Node14,Node15,Node16}",
 		pos="258,1311",
 		tooltip="[./Net2.lua]:72_",
 		width=7.1778];

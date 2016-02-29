@@ -1,6 +1,7 @@
 require 'image'
 require 'loadcaffe'
 require "lfs"
+require 'Utils'
 
 -- Loads the mapping from net outputs to human readable labels
 function load_synset()
@@ -12,7 +13,11 @@ function load_synset()
 end
 
 function preprocess(img) 
-    -- 16 layer VGG expects a 3x224x224 sized image
+
+-- Converting the image to grayscale
+  img = image.rgb2y(img)
+  img = y2rgb(img)
+-- 16 layer VGG expects a 3x224x224 sized image
   img = image.scale(img, 224, 224)
 -- Directly obtained from the website
   local mean_pixel = torch.DoubleTensor({103.939, 116.779, 123.68})

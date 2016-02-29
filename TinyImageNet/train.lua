@@ -11,10 +11,10 @@ local cmd = torch.CmdLine()
 -- Dataset options
 -- cmd:option('-input_h5', 'data/tiny-shakespeare.h5')
 -- cmd:option('-input_json', 'data/tiny-shakespeare.json')
-cmd:option('-batch_size', 2)
+cmd:option('-batch_size', 6)
 
 -- Optimization options
-cmd:option('-num_iterations', 100)
+cmd:option('-num_iterations', 5000)
 cmd:option('-learning_rate', 2e-3)
 cmd:option('-grad_clip', 5)
 -- cmd:option('-lr_decay_every', 5)
@@ -39,8 +39,14 @@ local opt = cmd:parse(arg)
 -- Initialize the model and criterion
 --local opt_clone = torch.deserialize(torch.serialize(opt))
 
+
 local dtype = 'torch.DoubleTensor'
+-- Creating a new model
 local model = create_colorNet();
+
+-- Loading a pre-rained model
+-- local checkpoint_1 = torch.load('../../results/checkpoint_50.t7')
+-- local model = checkpoint_1.model
 local params, grad_params = model:getParameters()
 local crit = nn.MSECriterion():type(dtype)
 
@@ -54,7 +60,8 @@ local function f(w)
 --  assert(w == params)
   grad_params:zero()
 
-  im_batch = get_image_batch(opt.batch_size)
+  im_batch = get_image_batch(opt.batch_size) -- Generalizes
+--   im_batch = get_validation_batch(opt.batch_size) --Overfits
   x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224)
 
   for i=1,im_batch:size()[1] do
@@ -74,7 +81,6 @@ local function f(w)
 --   if opt.grad_clip > 0 then
 --     grad_params:clamp(-opt.grad_clip, opt.grad_clip)
 --   end
-    
   return loss, grad_params
 end
 
@@ -98,11 +104,14 @@ for i = 1, num_iterations do
   -- Maybe save a checkpoint 
   local check_every = opt.checkpoint_every
   if (check_every > 0 and i % check_every == 0) or i == num_iterations then
+    print("Evaluating on val dataset")
     -- Evaluate loss on the validation set. Note that we reset the state of
     -- the model; this might happen in the middle of an epoch, but that
     -- shouldn't cause too much trouble.
 
     model:clearState()
+    
+    -- Going to test mode.
     model:evaluate()
     
     local im_batch = get_validation_batch(opt.batch_size)
@@ -133,12 +142,14 @@ for i = 1, num_iterations do
 
     model:clearState()
     checkpoint.model = model
+    print("Saving model checkpoint")
     local filename = string.format('%s_%d.t7', opt.checkpoint_name, i)
     paths.mkdir(paths.dirname(filename))
     torch.save(filename, checkpoint)
---     model:type(dtype)    
     
+    -- Back to training mode
     model:training()
-    collectgarbage()
+    collectgarbage()  
+    
   end
 end

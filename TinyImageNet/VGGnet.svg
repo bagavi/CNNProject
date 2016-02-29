@@ -177,8 +177,8 @@
 <text text-anchor="middle" x="258" y="-1337.3" font-family="Times,serif" font-size="14.00">Joining layer (12)</text>
 <text text-anchor="middle" x="258" y="-1322.3" font-family="Times,serif" font-size="14.00">desc = Joining input, level1, deconved_level3, deconved_level6</text>
 <text text-anchor="start" x="83" y="-1307.3" font-family="Times,serif" font-size="14.00">module = nn.JoinTable</text>
-<text text-anchor="start" x="83" y="-1292.3" font-family="Times,serif" font-size="14.00">mapindex = {Node13,Node14,Node15,Node16}</text>
-<text text-anchor="middle" x="258" y="-1277.3" font-family="Times,serif" font-size="14.00">reverseMap = {}</text>
+<text text-anchor="start" x="83" y="-1292.3" font-family="Times,serif" font-size="14.00">reverseMap = {}</text>
+<text text-anchor="middle" x="258" y="-1277.3" font-family="Times,serif" font-size="14.00">mapindex = {Node13,Node14,Node15,Node16}</text>
 </a>
 </g>
 </g>
