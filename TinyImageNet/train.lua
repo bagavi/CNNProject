@@ -11,11 +11,11 @@ local cmd = torch.CmdLine()
 -- Dataset options
 -- cmd:option('-input_h5', 'data/tiny-shakespeare.h5')
 -- cmd:option('-input_json', 'data/tiny-shakespeare.json')
-cmd:option('-batch_size', 6)
+cmd:option('-batch_size', 8)
 
 -- Optimization options
 cmd:option('-num_iterations', 2000)
-cmd:option('-learning_rate', 1e-3)
+cmd:option('-learning_rate', 3e-4)
 cmd:option('-grad_clip', 5)
 -- cmd:option('-lr_decay_every', 5)
 cmd:option('-lr_decay_factor', 0.87)
@@ -33,46 +33,59 @@ cmd:option('-memory_benchmark', 0)
 cmd:option('-gpu', 0)
 cmd:option('-gpu_backend', 'cuda')
 
+-- Load Model
+cmd:option('-load_model', false)
+cmd:option('-model_path','../../results/checkpoint_class_100.t7')
+cmd:option('-all_class', true)
+
 local opt = cmd:parse(arg)
 
 
 -- Initialize the model and criterion
 --local opt_clone = torch.deserialize(torch.serialize(opt))
 
-
+print("Loading the model...");
 local dtype = 'torch.DoubleTensor'
 -- Creating a new model
 local model = create_colorNet();
 
 -- Loading a pre-trained model
--- local checkpoint_1 = torch.load('../../results/checkpoint_class_800.t7')
--- local model = checkpoint_1.model
+if opt.load_model then
+    print("Loading the pretrained model: " .. opt.model_path);
+    checkpoint_1 = torch.load(opt.model_path)
+    model = checkpoint_1.model
+    print("Loaded the pretrained model: " .. opt.model_path);
+end
+
+print("Setting model into training model:");
+print("all_classes: ");
+print(opt.all_class);
 
 model:training()
 local params, grad_params = model:getParameters()
-local crit = nn.AbsCriterion():type(dtype)
--- local crit = nn.L1Cost():type(dtype)
--- local crit = nn.MSECriterion():type(dtype)
+-- local crit = nn.AbsCriterion():type(dtype)
+local crit = nn.MSECriterion():type(dtype)
 
 -- Set up some variables we will use below
--- local train_loss_history = {}
--- local val_loss_history = {}
--- local val_loss_history_it = {}
-
 local train_loss_history = {}
 local val_loss_history = {}
 local val_loss_history_it = {}
--- local train_loss_history = checkpoint_1.train_loss_history
--- local val_loss_history = checkpoint_1.val_loss_history
--- local val_loss_history_it = checkpoint_1.val_loss_history_it
+
+if opt.load_model then
+    local train_loss_history = checkpoint_1.train_loss_history
+    local val_loss_history = checkpoint_1.val_loss_history
+    local val_loss_history_it = checkpoint_1.val_loss_history_it
+end
 
 -- Loss function that we pass to an optim method
 local function f(w)
 --  assert(w == params)
   grad_params:zero()
 
---   im_batch = get_image_batch(opt.batch_size) -- Generalizes
-  im_batch = get_validation_batch(opt.batch_size) --Overfits
+  im_batch = get_image_batch(opt.batch_size, opt.all_class) -- Generalizes
+
+-- DONT overfit!
+--   im_batch = get_validation_batch(opt.batch_size) --Overfits
   x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224)
 
   for i=1,im_batch:size()[1] do
@@ -97,7 +110,7 @@ local function f(w)
 end
 
 
-
+print("Training starts! initial learning rate: " .. opt.learning_rate );
 -- Train the model!
 local optim_config = {learningRate = opt.learning_rate}
 local num_iterations = opt.num_iterations
@@ -145,7 +158,7 @@ for i = 1, num_iterations do
     table.insert(val_loss_history, val_loss)
     table.insert(val_loss_history_it, i)
    
-    params, grad_params = model:getParameters()
+--     params, grad_params = model:getParameters()
     
     local checkpoint = {
       opt = opt,
@@ -166,6 +179,7 @@ for i = 1, num_iterations do
     model:training()
     local old_lr = optim_config.learningRate
     optim_config = {learningRate = old_lr * opt.lr_decay_factor}
+    print("New learning rate: " .. optim_config.learningRate );    
     collectgarbage()  
     
   end
