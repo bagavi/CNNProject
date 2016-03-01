@@ -73,7 +73,8 @@ end
 -- Returns a file list of all the files in the directory
 --------------------------------------------------------------
 function get_file_names()
-    local image_dir = '../../Data/tiny-imagenet-200/test/images/'
+--     local image_dir = '../../Data/tiny-imagenet-200/test/images/'
+    local image_dir = '../../Data/tiny-imagenet-200/train/n09428293/images/'
     local max_count = num_images;
     file_names = {};
 
@@ -90,7 +91,8 @@ end
 -- Returns a file list of all the files in the directory
 --------------------------------------------------------------
 function get_val_image_names()
-    local val_image_dir = '../../Data/tiny-imagenet-200/val/images/'
+--      local val_image_dir = '../../Data/tiny-imagenet-200/val/images/'
+    local val_image_dir = '../../Data/tiny-imagenet-200/val/n09428293/'
     local max_count = num_images;
     file_names = {};
 
@@ -106,7 +108,8 @@ end
 -- Returns a random batch of images
 --------------------------------------------------------------
 function get_image_batch(num_images)
-    local image_dir = '../../Data/tiny-imagenet-200/test/images/'
+--     local image_dir = '../../Data/tiny-imagenet-200/test/images/'
+    local image_dir = '../../Data/tiny-imagenet-200/train/n09428293/images/'
     local max_count = num_images;
     local count = 1;
     local im_batch = nil
@@ -142,7 +145,8 @@ end
 -- Returns the validation batch
 --------------------------------------------------------------
 function get_validation_batch(num_images)
-    local val_image_dir = '../../Data/tiny-imagenet-200/val/images/'
+--    local val_image_dir = '../../Data/tiny-imagenet-200/val/images/'
+     local val_image_dir = '../../Data/tiny-imagenet-200/val/n09428293/'
     local max_count = num_images;
     local count = 1;
     local im_batch = nil

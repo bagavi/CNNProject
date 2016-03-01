@@ -14,16 +14,16 @@ local cmd = torch.CmdLine()
 cmd:option('-batch_size', 6)
 
 -- Optimization options
-cmd:option('-num_iterations', 5000)
-cmd:option('-learning_rate', 2e-3)
+cmd:option('-num_iterations', 2000)
+cmd:option('-learning_rate', 1e-3)
 cmd:option('-grad_clip', 5)
 -- cmd:option('-lr_decay_every', 5)
--- cmd:option('-lr_decay_factor', 0.5)
+cmd:option('-lr_decay_factor', 0.87)
 
 -- Output options
 cmd:option('-print_every', 1)
-cmd:option('-checkpoint_every', 10)
-cmd:option('-checkpoint_name', '../../results/checkpoint')
+cmd:option('-checkpoint_every', 100)
+cmd:option('-checkpoint_name', '../../results/checkpoint_class')
 
 -- Benchmark options
 cmd:option('-speed_benchmark', 0)
@@ -44,24 +44,35 @@ local dtype = 'torch.DoubleTensor'
 -- Creating a new model
 local model = create_colorNet();
 
--- Loading a pre-rained model
--- local checkpoint_1 = torch.load('../../results/checkpoint_50.t7')
+-- Loading a pre-trained model
+-- local checkpoint_1 = torch.load('../../results/checkpoint_class_800.t7')
 -- local model = checkpoint_1.model
+
+model:training()
 local params, grad_params = model:getParameters()
-local crit = nn.MSECriterion():type(dtype)
+local crit = nn.AbsCriterion():type(dtype)
+-- local crit = nn.L1Cost():type(dtype)
+-- local crit = nn.MSECriterion():type(dtype)
 
 -- Set up some variables we will use below
+-- local train_loss_history = {}
+-- local val_loss_history = {}
+-- local val_loss_history_it = {}
+
 local train_loss_history = {}
 local val_loss_history = {}
 local val_loss_history_it = {}
+-- local train_loss_history = checkpoint_1.train_loss_history
+-- local val_loss_history = checkpoint_1.val_loss_history
+-- local val_loss_history_it = checkpoint_1.val_loss_history_it
 
 -- Loss function that we pass to an optim method
 local function f(w)
 --  assert(w == params)
   grad_params:zero()
 
-  im_batch = get_image_batch(opt.batch_size) -- Generalizes
---   im_batch = get_validation_batch(opt.batch_size) --Overfits
+--   im_batch = get_image_batch(opt.batch_size) -- Generalizes
+  im_batch = get_validation_batch(opt.batch_size) --Overfits
   x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224)
 
   for i=1,im_batch:size()[1] do
@@ -69,7 +80,8 @@ local function f(w)
   end
   uv_images, y_images = create_yuv_images(im_batch,56,56)
   x, uv_images = x:type(dtype), uv_images:type(dtype)
-  local y = uv_images + 0.5
+--   local y = uv_images + 0.5
+  local y = uv_images*2
 
   local scores = model:forward(x)
   local loss   = crit:forward(scores, y)
@@ -109,6 +121,7 @@ for i = 1, num_iterations do
     -- the model; this might happen in the middle of an epoch, but that
     -- shouldn't cause too much trouble.
 
+    
     model:clearState()
     
     -- Going to test mode.
@@ -122,7 +135,8 @@ for i = 1, num_iterations do
     end
     local uv_images, y_images = create_yuv_images(im_batch,56,56)
     local x, uv_images = x:type(dtype), uv_images:type(dtype)
-    local y = uv_images + 0.5
+--     local y = uv_images + 0.5
+    local y = uv_images*2
 
     local scores = model:forward(x)
     local val_loss = crit:forward(scores, y)    
@@ -142,13 +156,16 @@ for i = 1, num_iterations do
 
     model:clearState()
     checkpoint.model = model
-    print("Saving model checkpoint")
+    print("Saving model checkpoint: ")
     local filename = string.format('%s_%d.t7', opt.checkpoint_name, i)
     paths.mkdir(paths.dirname(filename))
     torch.save(filename, checkpoint)
+    print("Checkpoint Saved: ".. filename)
     
     -- Back to training mode
     model:training()
+    local old_lr = optim_config.learningRate
+    optim_config = {learningRate = old_lr * opt.lr_decay_factor}
     collectgarbage()  
     
   end
