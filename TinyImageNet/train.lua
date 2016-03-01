@@ -5,6 +5,7 @@ require 'image'
 require 'VGG'
 require 'optim'
 require 'Net2'
+require 'gnuplot'
 
 local cmd = torch.CmdLine()
 
@@ -24,6 +25,7 @@ cmd:option('-lr_decay_factor', 0.87)
 cmd:option('-print_every', 1)
 cmd:option('-checkpoint_every', 100)
 cmd:option('-checkpoint_name', '../../results/checkpoint_class')
+cmd:option('-image_name', '../../results/image_checkpoint')
 
 -- Benchmark options
 cmd:option('-speed_benchmark', 0)
@@ -33,10 +35,13 @@ cmd:option('-memory_benchmark', 0)
 cmd:option('-gpu', 0)
 cmd:option('-gpu_backend', 'cuda')
 
--- Load Model
+-- Load Model/Data
 cmd:option('-load_model', false)
-cmd:option('-model_path','../../results/checkpoint_class_100.t7')
-cmd:option('-all_class', true)
+cmd:option('-model_path','../../arxiv/all_classes_32_3_MSE.t7')
+cmd:option('-all_class', false)
+cmd:option('-train_path','../../Data/tiny-imagenet-200/train/lemon_sky/images/')
+cmd:option('-val_path','../../Data/tiny-imagenet-200/val/lemon_sky/')
+
 
 local opt = cmd:parse(arg)
 
@@ -82,10 +87,8 @@ local function f(w)
 --  assert(w == params)
   grad_params:zero()
 
-  im_batch = get_image_batch(opt.batch_size, opt.all_class) -- Generalizes
+  im_batch = get_image_batch(opt.batch_size, opt.train_path) -- Generalizes
 
--- DONT overfit!
---   im_batch = get_validation_batch(opt.batch_size) --Overfits
   x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224)
 
   for i=1,im_batch:size()[1] do
@@ -140,7 +143,7 @@ for i = 1, num_iterations do
     -- Going to test mode.
     model:evaluate()
     
-    local im_batch = get_validation_batch(opt.batch_size)
+    local im_batch = get_validation_batch(opt.batch_size, opt.val_path)
     local x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224)
 
     for i=1,im_batch:size()[1] do
@@ -153,7 +156,8 @@ for i = 1, num_iterations do
 
     local scores = model:forward(x)
     local val_loss = crit:forward(scores, y)    
-    
+    local uv_op = model.output*0.5
+        
     print('val_loss = ', val_loss)
     table.insert(val_loss_history, val_loss)
     table.insert(val_loss_history_it, i)
@@ -174,6 +178,28 @@ for i = 1, num_iterations do
     paths.mkdir(paths.dirname(filename))
     torch.save(filename, checkpoint)
     print("Checkpoint Saved: ".. filename)
+    
+    -- Saving the images
+    print("Saving images: ")
+    local imagepath = string.format('%s_%d/', opt.image_name, i)
+    paths.mkdir(imagepath)
+    
+    for j = 1,opt.batch_size do
+        local size = 112
+        local input_imagename =  string.format('%sinput_%d.png', imagepath, j)
+        image.save(input_imagename, image.scale(y2rgb(image.rgb2y(im_batch[j])),size,size))
+        
+        local output_imagename =  string.format('%soutput_%d.png', imagepath, j)
+        local output_image = image.scale(image.yuv2rgb(torch.cat(y_images[j],uv_op[j],1)),size,size)   
+        image.save(output_imagename,output_image)        
+        
+        local original_imagename =  string.format('%sorig_%d.png', imagepath, j)
+        local orig_image = image.scale(image.yuv2rgb(torch.cat(y_images[j],uv_images[j],1)),size,size)
+        image.save(original_imagename,orig_image)        
+    end
+    
+    -- Saving the plots
+    -- TODO
     
     -- Back to training mode
     model:training()

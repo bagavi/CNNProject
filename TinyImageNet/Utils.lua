@@ -72,11 +72,8 @@ end
 --------------------------------------------------------------
 -- Returns a file list of all the files in the directory
 --------------------------------------------------------------
-function get_file_names(all_class_flag)
-    local image_dir = '../../Data/tiny-imagenet-200/train/n09428293/images/'
-    if all_class_flag then
-        image_dir = '../../Data/tiny-imagenet-200/test/images/'
-    end
+function get_file_names(train_path)
+    local image_dir = train_path
 
     local max_count = num_images;
     file_names = {};
@@ -93,9 +90,8 @@ end
 --------------------------------------------------------------
 -- Returns a file list of all the files in the directory
 --------------------------------------------------------------
-function get_val_image_names()
-    local val_image_dir = '../../Data/tiny-imagenet-200/val/images/'
---     local val_image_dir = '../../Data/tiny-imagenet-200/val/n09428293/'
+function get_val_image_names(val_path)
+    local val_image_dir = val_path
     local max_count = num_images;
     file_names = {};
 
@@ -109,17 +105,14 @@ end
 
 --------------------------------------------------------------
 -- Returns a random batch of images
---------------------------------------------------------------
-function get_image_batch(num_images,all_class_flag)
-    local image_dir = '../../Data/tiny-imagenet-200/train/n09428293/images/'
-    if all_class_flag then
-        image_dir = '../../Data/tiny-imagenet-200/test/images/'
-    end
+---------------------------------------------------------------
+function get_image_batch(num_images,train_path)
+    local image_dir = train_path
     
     local max_count = num_images;
     local count = 1;
     local im_batch = nil
-    local file_names = get_file_names(all_class_flag);
+    local file_names = get_file_names(train_path);
     local num_files = #file_names
     
     -- Bad code
@@ -150,13 +143,13 @@ end
 --------------------------------------------------------------
 -- Returns the validation batch
 --------------------------------------------------------------
-function get_validation_batch(num_images)
-    local val_image_dir = '../../Data/tiny-imagenet-200/val/images/'
---      local val_image_dir = '../../Data/tiny-imagenet-200/val/n09428293/'
+function get_validation_batch(num_images,val_path)
+    local val_image_dir = val_path
+   
     local max_count = num_images;
     local count = 1;
     local im_batch = nil
-    local file_names = get_val_image_names();
+    local file_names = get_val_image_names(val_path);
     local num_files = #file_names
     
     -- Bad code
