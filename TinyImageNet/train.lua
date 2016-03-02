@@ -4,7 +4,7 @@ require 'loadcaffe'
 require 'image'
 require 'VGG'
 require 'optim'
-require 'Net2'
+require 'Net3' --IMP
 require 'gnuplot'
 
 local cmd = torch.CmdLine()

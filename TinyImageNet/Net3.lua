@@ -19,9 +19,9 @@ function create_colorNet()
     local conv11 = net.modules[11]
     local conv13 = net.modules[13]
     local conv15 = net.modules[15]
---     local conv18 = net.modules[18]
---     local conv20 = net.modules[20]
---     local conv22 = net.modules[22]
+    local conv18 = net.modules[18]
+    local conv20 = net.modules[20]
+    local conv22 = net.modules[22]
 --     local conv25 = net.modules[25]
 --     local conv27 = net.modules[27]
 --     local conv29 = net.modules[27]
@@ -58,6 +58,20 @@ function create_colorNet()
        graphAttributes = {color = 'blue'}
     }
     
+    -- New addition.
+    local level_7  = conv18( nn.SpatialMaxPooling(2,2,2,2)(nn.ReLU()(level_6)) ):annotate{
+       name = 'Conv Layer 3', description = 'Image Features',
+       graphAttributes = {color = 'red'}
+    }
+    local level_8  = conv20(nn.ReLU()(level_7)):annotate{
+       name = 'Conv Layer 4', description = 'Image Features',
+       graphAttributes = {color = 'red'}
+    }
+    local level_9  = conv22(nn.ReLU()(level_8)):annotate{
+       name = 'Conv Layer 4', description = 'Image Features',
+       graphAttributes = {color = 'blue'}
+    }
+    
     ----------------------------------------------------------------------------------------------
     
     local dimension = 2
@@ -70,14 +84,24 @@ function create_colorNet()
        name = 'Deconving level 6', description = 'To increase the dimension',
        graphAttributes = {color = 'yellow'}
     }
-    local output_VGG = (nn.JoinTable(dimension)({input, level_1, level_3_deconv, level_6_deconv})):annotate{
+    
+    local level_9_deconv = nn.SpatialFullConvolution(512, 64, 4, 4, 8, 8, 0, 0, 4, 4)(level_9):annotate{
+       name = 'Deconving level 6', description = 'To increase the dimension',
+       graphAttributes = {color = 'yellow'}
+    }
+    
+    local output_VGG = (nn.JoinTable(dimension)({input, 
+                                                level_1, 
+                                                level_3_deconv, 
+                                                level_6_deconv, 
+                                                level_9_deconv})):annotate{
        name = 'Joining layer', description = 'Joining input, level1, deconved_level3, deconved_level6',
        graphAttributes = {color = 'grey'}
     }
 
 
     -- Building our own network from here. 3 layers
-    local level_6point5 = nn.SpatialBatchNormalization(32)( nn.SpatialConvolution(131, 32, 3, 3, 1, 1, 1, 1)(output_VGG))
+    local level_6point5 = nn.SpatialBatchNormalization(32)( nn.SpatialConvolution(195, 32, 3, 3, 1, 1, 1, 1)(output_VGG))
     local level_7 = nn.SpatialMaxPooling(2,2,2,2)(nn.ReLU()( level_6point5 ))
 
     local level_7point5 = nn.SpatialBatchNormalization(64)( nn.SpatialConvolution(32, 64, 3, 3, 1, 1, 1, 1)(level_7))
