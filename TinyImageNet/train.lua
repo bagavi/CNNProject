@@ -12,7 +12,7 @@ local cmd = torch.CmdLine()
 -- Dataset options
 -- cmd:option('-input_h5', 'data/tiny-shakespeare.h5')
 -- cmd:option('-input_json', 'data/tiny-shakespeare.json')
-cmd:option('-batch_size', 8)
+cmd:option('-batch_size', 4)
 
 -- Optimization options
 cmd:option('-num_iterations', 2000)
@@ -26,6 +26,7 @@ cmd:option('-print_every', 1)
 cmd:option('-checkpoint_every', 100)
 cmd:option('-checkpoint_name', '../../results/checkpoint_class')
 cmd:option('-image_name', '../../results/image_checkpoint')
+cmd:option('-plot_path', '../../results/')
 
 -- Benchmark options
 cmd:option('-speed_benchmark', 0)
@@ -39,8 +40,8 @@ cmd:option('-gpu_backend', 'cuda')
 cmd:option('-load_model', false)
 cmd:option('-model_path','../../arxiv/all_classes_32_3_MSE.t7')
 cmd:option('-all_class', false)
-cmd:option('-train_path','../../Data/tiny-imagenet-200/train/lemon_sky/images/')
-cmd:option('-val_path','../../Data/tiny-imagenet-200/val/lemon_sky/')
+cmd:option('-train_path','../../Data/tiny-imagenet-200/train/lemon_sky_elephant/images/')
+cmd:option('-val_path','../../Data/tiny-imagenet-200/val/lemon_sky_elephant/')
 
 
 local opt = cmd:parse(arg)
@@ -131,7 +132,7 @@ for i = 1, num_iterations do
     
   -- Maybe save a checkpoint 
   local check_every = opt.checkpoint_every
-  if (check_every > 0 and i % check_every == 0) or i == num_iterations then
+  if (check_every > 0 and (i-1) % check_every == 0) or i == num_iterations then
     print("Evaluating on val dataset")
     -- Evaluate loss on the validation set. Note that we reset the state of
     -- the model; this might happen in the middle of an epoch, but that
@@ -146,8 +147,8 @@ for i = 1, num_iterations do
     local im_batch = get_validation_batch(opt.batch_size, opt.val_path)
     local x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224)
 
-    for i=1,im_batch:size()[1] do
-        x[i] = preprocess(im_batch[i])
+    for k=1,im_batch:size()[1] do
+        x[k] = preprocess(im_batch[k])
     end
     local uv_images, y_images = create_yuv_images(im_batch,56,56)
     local x, uv_images = x:type(dtype), uv_images:type(dtype)
@@ -171,6 +172,19 @@ for i = 1, num_iterations do
       val_loss_history_it = val_loss_history_it,
     }
 
+    -- Saving the plots
+    local filename = string.format('../../results/train_history.png' )
+    gnuplot.pngfigure(filename)
+    gnuplot.plot(torch.Tensor(train_loss_history))
+    gnuplot.plotflush()
+    
+    local filename = string.format('../../results/val_history.png')
+    gnuplot.pngfigure(filename)
+    gnuplot.plot(torch.Tensor(val_loss_history))
+    gnuplot.plotflush()
+
+    -- Save the model
+        
     model:clearState()
     checkpoint.model = model
     print("Saving model checkpoint: ")
@@ -198,9 +212,7 @@ for i = 1, num_iterations do
         image.save(original_imagename,orig_image)        
     end
     
-    -- Saving the plots
-    -- TODO
-    
+        
     -- Back to training mode
     model:training()
     local old_lr = optim_config.learningRate

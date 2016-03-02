@@ -95,20 +95,20 @@ function create_colorNet()
                                                 level_3_deconv, 
                                                 level_6_deconv, 
                                                 level_9_deconv})):annotate{
-       name = 'Joining layer', description = 'Joining input, level1, deconved_level3, deconved_level6',
+       name = 'Joining layer. Fuck yeah!', description = 'Joining input, level1, deconved_level3, deconved_level6',
        graphAttributes = {color = 'grey'}
     }
 
 
     -- Building our own network from here. 3 layers
-    local level_6point5 = nn.SpatialBatchNormalization(32)( nn.SpatialConvolution(195, 32, 3, 3, 1, 1, 1, 1)(output_VGG))
+    local level_6point5 = nn.SpatialBatchNormalization(64)( nn.SpatialConvolution(195, 64, 3, 3, 1, 1, 1, 1)(output_VGG))
     local level_7 = nn.SpatialMaxPooling(2,2,2,2)(nn.ReLU()( level_6point5 ))
 
-    local level_7point5 = nn.SpatialBatchNormalization(64)( nn.SpatialConvolution(32, 64, 3, 3, 1, 1, 1, 1)(level_7))
+    local level_7point5 = nn.SpatialBatchNormalization(128)( nn.SpatialConvolution(64, 128, 3, 3, 1, 1, 1, 1)(level_7))
 
     local level_8 = nn.SpatialMaxPooling(2,2,2,2)(nn.ReLU()( level_7point5 ))
     
-    local level_9= nn.Tanh()( nn.SpatialConvolution(64, 2, 3, 3, 1, 1, 1, 1)(level_8)):annotate{
+    local level_9= nn.Tanh()( nn.SpatialConvolution(128, 2, 3, 3, 1, 1, 1, 1)(level_8)):annotate{
        name = 'Final Layer', description = 'Final output. Using Sigmoid',
        graphAttributes = {color = 'purple'}
     }
