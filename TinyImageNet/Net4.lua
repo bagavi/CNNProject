@@ -146,9 +146,9 @@ function create_colorNet()
                         }
     -- Changing the color of the nodes which have will have backpropogation
     
-    for i=1,15 do
-        all_bn[i].data.annotations.graphAttributes.color = 'green'
-    end
+--     for i=1,15 do
+--         all_bn[i].data.annotations.graphAttributes.color = 'green'
+--     end
     
     graph.dot(model.bg, 'MLP', 'VGGnet')
 

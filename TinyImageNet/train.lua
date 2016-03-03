@@ -19,7 +19,7 @@ cmd:option('-num_iterations', 2000)
 cmd:option('-learning_rate', 3e-4)
 cmd:option('-grad_clip', 5)
 -- cmd:option('-lr_decay_every', 5)
-cmd:option('-lr_decay_factor', 0.87)
+cmd:option('-lr_decay_factor', 0.75)
 
 -- Output options
 cmd:option('-print_every', 1)
@@ -69,6 +69,8 @@ print(opt.all_class);
 
 model:training()
 local params, grad_params = model:getParameters()
+grad_params:zero()
+
 -- local crit = nn.AbsCriterion():type(dtype)
 local crit = nn.MSECriterion():type(dtype)
 
@@ -86,7 +88,6 @@ end
 -- Loss function that we pass to an optim method
 local function f(w)
 --  assert(w == params)
-  grad_params:zero()
 
   im_batch = get_image_batch(opt.batch_size, opt.train_path) -- Generalizes
 
