@@ -6,26 +6,26 @@ require 'VGG'
 require 'optim'
 require 'Net3' --IMP
 require 'gnuplot'
-require 'GradL1Loss'
+require 'GradL1WeightedLoss'
 
 local cmd = torch.CmdLine()
 
 -- Dataset options
 -- cmd:option('-input_h5', 'data/tiny-shakespeare.h5')
 -- cmd:option('-input_json', 'data/tiny-shakespeare.json')
-cmd:option('-batch_size', 4)
+cmd:option('-batch_size', 6)
 
 -- Optimization options
 cmd:option('-num_iterations', 2000)
-cmd:option('-learning_rate', 3e-4)
+cmd:option('-learning_rate', 1e-6)
 cmd:option('-grad_clip', 5)
 -- cmd:option('-lr_decay_every', 5)
-cmd:option('-lr_decay_factor', 0.75)
-cmd:option('-tv_strength', 1e-1)
+cmd:option('-lr_decay_factor', 0.9)
+cmd:option('-tv_strength', 1e-3)
 
 -- Output options
 cmd:option('-print_every', 1)
-cmd:option('-checkpoint_every', 10)
+cmd:option('-checkpoint_every', 31)
 cmd:option('-checkpoint_name', '../../results/checkpoint_class')
 cmd:option('-image_name', '../../results/image_checkpoint')
 cmd:option('-plot_path', '../../results/')
@@ -40,7 +40,7 @@ cmd:option('-gpu_backend', 'cuda')
 
 -- Load Model/Data
 cmd:option('-load_model', false)
-cmd:option('-model_path','../../arxiv/all_classes_32_3_MSE.t7')
+cmd:option('-model_path','../../results/checkpoint_class_571.t7')
 cmd:option('-all_class', false)
 cmd:option('-train_path','../../Data/tiny-imagenet-200/train/lemon_sky_elephant/images/')
 cmd:option('-val_path','../../Data/tiny-imagenet-200/val/lemon_sky_elephant/')
@@ -48,9 +48,6 @@ cmd:option('-val_path','../../Data/tiny-imagenet-200/val/lemon_sky_elephant/')
 
 local opt = cmd:parse(arg)
 
-
--- Initialize the model and criterion
---local opt_clone = torch.deserialize(torch.serialize(opt))
 
 print("Loading the model...");
 local dtype = 'torch.DoubleTensor'
@@ -73,9 +70,10 @@ model:training()
 local params, grad_params = model:getParameters()
 grad_params:zero()
 
--- local crit = nn.AbsCriterion():type(dtype)
-local crit = nn.MSECriterion():type(dtype)
-local L1gradcrit = nn.GradL1Loss(opt.tv_strength):type(dtype)
+local crit = nn.AbsCriterion():type(dtype)
+-- local crit = nn.MSECriterion():type(dtype)
+
+local L1gradcrit = nn.GradL1WeightedLoss(opt.tv_strength):type(dtype)
 
 -- Set up some variables we will use below
 local train_loss_history = {}
@@ -108,12 +106,15 @@ local function f(w)
 --   print (scores:size())
   local loss   = crit:forward(scores, y)
   L1gradloss   = L1gradcrit:forward(scores, y)
-    
+
   -- Run the Criterion and model backward to compute gradients, maybe timing it
   local grad_scores = crit:backward(scores, y)
     
   local L1grad_score = L1gradcrit:backward(scores,y)
-
+  
+--   print(torch.mean(grad_scores:cdiv(L1grad_score):abs() ) )
+--   print(torch.norm(grad_scores))
+--   print(torch.norm(L1grad_score))
   model:backward(x, grad_scores + L1grad_score)
 
 --   if opt.grad_clip > 0 then
@@ -135,7 +136,7 @@ for i = 1, num_iterations do
   table.insert(train_loss_history, loss[1])
   if opt.print_every > 0 and i % opt.print_every == 0 then
     local msg = ' i = %d / %d, loss = %f, L1gradloss = %f'
-    local args = {msg,  i, num_iterations, loss[1], L1gradloss/opt.tv_strength}
+    local args = {msg,  i, num_iterations, loss[1], L1gradloss}
     print(string.format(unpack(args)))
   end
     
@@ -153,7 +154,7 @@ for i = 1, num_iterations do
     -- Going to test mode.
     model:evaluate()
     
-    local im_batch = get_validation_batch(opt.batch_size, opt.val_path)
+    local im_batch = get_validation_batch(opt.batch_size, opt.val_path, true)
     local x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224)
 
     for k=1,im_batch:size()[1] do
@@ -166,7 +167,7 @@ for i = 1, num_iterations do
 
     local scores = model:forward(x)
     local val_loss = crit:forward(scores, y) 
-    local val_L1gradloss   = L1gradcrit:forward(scores)
+    local val_L1gradloss   = L1gradcrit:forward(scores, y)
     local uv_op = model.output*0.5
         
     print('val_loss = ', val_loss)
