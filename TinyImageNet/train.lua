@@ -53,7 +53,7 @@ local opt = cmd:parse(arg)
 --local opt_clone = torch.deserialize(torch.serialize(opt))
 
 print("Loading the model...");
-local dtype = 'torch.DoubleTensor'
+local dtype = 'torch.FloatTensor'
 -- Creating a new model
 local model = create_colorNet();
 
