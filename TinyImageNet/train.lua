@@ -56,7 +56,7 @@ print("Loading the model...");
 local dtype = 'torch.FloatTensor'
 -- Creating a new model
 local model = create_colorNet();
-
+model = model:type(dtype)
 -- Loading a pre-trained model
 if opt.load_model then
     print("Loading the pretrained model: " .. opt.model_path);
@@ -105,9 +105,14 @@ local function f(w)
 
   local scores = model:forward(x)
   local loss   = crit:forward(scores, y)
-
+  
   -- Run the Criterion and model backward to compute gradients, maybe timing it
   local grad_scores = crit:backward(scores, y)
+  scores = nil
+  im_batch = nil
+  uv_images = nil
+  y_images  = nil
+  x = nil  
   model:backward(x, grad_scores)
 
 --   if opt.grad_clip > 0 then
@@ -121,11 +126,14 @@ print("Training starts! initial learning rate: " .. opt.learning_rate );
 -- Train the model!
 local optim_config = {learningRate = opt.learning_rate}
 local num_iterations = opt.num_iterations
+local time1 = os.time()  
 for i = 1, num_iterations do
 
   -- Take a gradient step and maybe print
   -- Note that adam returns a singleton array of losses
   local _, loss = optim.adam(f, params, optim_config)
+  print((os.time() - time1)/i)
+
   table.insert(train_loss_history, loss[1])
   if opt.print_every > 0 and i % opt.print_every == 0 then
     local msg = ' i = %d / %d, loss = %f'
@@ -148,7 +156,7 @@ for i = 1, num_iterations do
     model:evaluate()
     
     local im_batch = get_validation_batch(opt.batch_size*opt.num_val_batches, opt.val_path, true)
-    local x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224)
+    local x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224):type(dtype)
 
     for k=1,im_batch:size()[1] do
         x[k] = preprocess(im_batch[k])
@@ -211,6 +219,7 @@ for i = 1, num_iterations do
     for j = 1,opt.batch_size*opt.num_val_batches do
         local size = 112
         local input_imagename =  string.format('%sinput_%d.png', imagepath, j)
+        
         image.save(input_imagename, image.scale(y2rgb(image.rgb2y(im_batch[j])),size,size))
         
         local output_imagename =  string.format('%soutput_%d.png', imagepath, j)
@@ -218,16 +227,21 @@ for i = 1, num_iterations do
         image.save(output_imagename,output_image)        
         
         local original_imagename =  string.format('%sorig_%d.png', imagepath, j)
-        local orig_image = image.scale(image.yuv2rgb(torch.cat(y_images[j],uv_images[j],1)),size,size)
+        local orig_image = image.scale(im_batch[j],size,size)
         image.save(original_imagename,orig_image)        
     end
-    
+    print("Saved images")
         
     -- Back to training mode
     model:training()
     local old_lr = optim_config.learningRate
     optim_config = {learningRate = old_lr * opt.lr_decay_factor}
-    print("New learning rate: " .. optim_config.learningRate );    
+    print("New learning rate: " .. optim_config.learningRate );
+    checkpoint = nil
+    im_batch = nil
+    uv_images = nil
+    y_images  = nil
+    x = nil
     collectgarbage()  
     
   end

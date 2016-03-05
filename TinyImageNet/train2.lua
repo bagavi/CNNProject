@@ -39,8 +39,8 @@ cmd:option('-gpu', 0)
 cmd:option('-gpu_backend', 'cuda')
 
 -- Load Model/Data
-cmd:option('-load_model', false)
-cmd:option('-model_path','../../results/checkpoint_class_571.t7')
+cmd:option('-load_model', true)
+cmd:option('-model_path','../../results/checkpoint_class_201.t7')
 cmd:option('-all_class', false)
 cmd:option('-train_path','../../Data/tiny-imagenet-200/train/lemon_sky_elephant/images/')
 cmd:option('-val_path','../../Data/tiny-imagenet-200/val/lemon_sky_elephant/')
@@ -58,7 +58,7 @@ local model = create_colorNet();
 if opt.load_model then
     print("Loading the pretrained model: " .. opt.model_path);
     checkpoint_1 = torch.load(opt.model_path)
-    model = checkpoint_1.model
+    model = checkpoint_1.model:type(dtype)
     print("Loaded the pretrained model: " .. opt.model_path);
 end
 
