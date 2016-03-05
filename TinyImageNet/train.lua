@@ -16,10 +16,10 @@ cmd:option('-batch_size', 4)
 
 -- Optimization options
 cmd:option('-num_iterations', 2000)
-cmd:option('-learning_rate', 3e-4)
+cmd:option('-learning_rate', 3e-6)
 cmd:option('-grad_clip', 5)
 -- cmd:option('-lr_decay_every', 5)
-cmd:option('-lr_decay_factor', 0.87)
+cmd:option('-lr_decay_factor', 0.85)
 
 -- Output options
 cmd:option('-print_every', 1)
@@ -40,18 +40,20 @@ cmd:option('-gpu_backend', 'cuda')
 cmd:option('-load_model', false)
 cmd:option('-model_path','../../arxiv/all_classes_32_3_MSE.t7')
 cmd:option('-all_class', false)
-cmd:option('-train_path','../../Data/tiny-imagenet-200/train/lemon_sky_elephant/images/')
-cmd:option('-val_path','../../Data/tiny-imagenet-200/val/lemon_sky_elephant/')
-
+cmd:option('-train_path','../../Data/tiny-imagenet-200/train/lemon_sky_elephant_big/images/')
+cmd:option('-val_path','../../Data/tiny-imagenet-200/val/lemon_sky_elephant_big/')
+cmd:option('-num_val_batches',2)
 
 local opt = cmd:parse(arg)
+
+-- Functions for validation testing
 
 
 -- Initialize the model and criterion
 --local opt_clone = torch.deserialize(torch.serialize(opt))
 
 print("Loading the model...");
-local dtype = 'torch.DoubleTensor'
+local dtype = 'torch.FloatTensor'
 -- Creating a new model
 local model = create_colorNet();
 
@@ -69,8 +71,10 @@ print(opt.all_class);
 
 model:training()
 local params, grad_params = model:getParameters()
--- local crit = nn.AbsCriterion():type(dtype)
-local crit = nn.MSECriterion():type(dtype)
+grad_params:zero()
+
+local crit = nn.AbsCriterion():type(dtype)
+-- local crit = nn.MSECriterion():type(dtype)
 
 -- Set up some variables we will use below
 local train_loss_history = {}
@@ -86,7 +90,6 @@ end
 -- Loss function that we pass to an optim method
 local function f(w)
 --  assert(w == params)
-  grad_params:zero()
 
   im_batch = get_image_batch(opt.batch_size, opt.train_path) -- Generalizes
 
@@ -144,7 +147,7 @@ for i = 1, num_iterations do
     -- Going to test mode.
     model:evaluate()
     
-    local im_batch = get_validation_batch(opt.batch_size, opt.val_path)
+    local im_batch = get_validation_batch(opt.batch_size*opt.num_val_batches, opt.val_path, true)
     local x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224)
 
     for k=1,im_batch:size()[1] do
@@ -155,10 +158,18 @@ for i = 1, num_iterations do
 --     local y = uv_images + 0.5
     local y = uv_images*2
 
-    local scores = model:forward(x)
-    local val_loss = crit:forward(scores, y)    
-    local uv_op = model.output*0.5
-        
+    -- Run validation in small batches as we cannot handle larger batches
+    local uv_op = torch.Tensor(uv_images:size());
+    local val_loss = 0
+    for val_batch=1,opt.num_val_batches do
+        local start_index = (val_batch-1)*opt.batch_size+1
+        local end_index = val_batch*opt.batch_size
+        local scores = model:forward(x[{{start_index,end_index},{},{},{}}])
+        val_loss = val_loss + crit:forward(scores, y[{{start_index,end_index},{},{},{}}])    
+        uv_op[{{start_index,end_index},{},{},{}}] = model.output*0.5
+    end
+    val_loss = val_loss/opt.num_val_batches   
+    
     print('val_loss = ', val_loss)
     table.insert(val_loss_history, val_loss)
     table.insert(val_loss_history_it, i)
@@ -184,7 +195,6 @@ for i = 1, num_iterations do
     gnuplot.plotflush()
 
     -- Save the model
-        
     model:clearState()
     checkpoint.model = model
     print("Saving model checkpoint: ")
@@ -198,7 +208,7 @@ for i = 1, num_iterations do
     local imagepath = string.format('%s_%d/', opt.image_name, i)
     paths.mkdir(imagepath)
     
-    for j = 1,opt.batch_size do
+    for j = 1,opt.batch_size*opt.num_val_batches do
         local size = 112
         local input_imagename =  string.format('%sinput_%d.png', imagepath, j)
         image.save(input_imagename, image.scale(y2rgb(image.rgb2y(im_batch[j])),size,size))

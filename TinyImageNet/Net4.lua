@@ -76,6 +76,7 @@ function create_colorNet()
     }
 
      model = nn.gModule({input1, input2,input3, input4}, {level_9})
+
     ----------------------------------------------------------------------------------------------
     
     return model  

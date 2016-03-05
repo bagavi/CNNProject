@@ -18,7 +18,8 @@ function preprocess(img)
   img = image.rgb2y(img)
   img = y2rgb(img)
 -- 16 layer VGG expects a 3x224x224 sized image
-  img = image.scale(img, 224, 224)
+-- Image is resized in the training phase
+--img = image.scale(img, 224, 224)
 -- Directly obtained from the website
   local mean_pixel = torch.DoubleTensor({103.939, 116.779, 123.68})
 -- Permuting from RBG to BGR

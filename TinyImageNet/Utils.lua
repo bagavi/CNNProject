@@ -49,8 +49,8 @@ function create_yuv_images(images,output_w,output_h)
     yuv_temp = image.scale(yuv_temp,w,h,'bilinear')
     local uv_temp = yuv_temp[{{2,3}}]
     local y_temp = yuv_temp[{{1}}]
-    uv_temp = uv_temp:reshape(1,uv_temp:size()[1], uv_temp:size()[2], uv_temp:size()[3] );
-    y_temp = y_temp:reshape(1,y_temp:size()[1], y_temp:size()[2], y_temp:size()[3] );
+    uv_temp = uv_temp:reshape(1,2, output_w, output_h );
+    y_temp  = y_temp:reshape(1,1, output_w, output_h );
     uv_images = uv_temp
     y_images = y_temp
 
@@ -60,8 +60,8 @@ function create_yuv_images(images,output_w,output_h)
         uv_temp = yuv_temp[{{2,3}}]
         y_temp = yuv_temp[{{1}}]
 
-        uv_temp = uv_temp:reshape(1,uv_temp:size()[1], uv_temp:size()[2], uv_temp:size()[3]);
-        y_temp = y_temp:reshape(1,y_temp:size()[1], y_temp:size()[2], y_temp:size()[3] );
+        uv_temp = uv_temp:reshape(1,2, output_w, output_h );
+        y_temp = y_temp:reshape(1,1, output_w, output_h );
 
         uv_images = torch.cat(uv_images,uv_temp,1)
         y_images = torch.cat(y_images,y_temp,1)
@@ -120,7 +120,7 @@ function get_image_batch(num_images,train_path)
     local image_path = image_dir .. file
     local im = image.load(image_path);
     local im_size = im:size();
-    local im_batch = torch.Tensor(num_images, im_size[1], im_size[2], im_size[3])
+    local im_batch = torch.Tensor(num_images, 3, 224, 224)
     
     math.randomseed( os.time() )
     for count=1,num_images do
@@ -129,8 +129,8 @@ function get_image_batch(num_images,train_path)
         local file = file_names[rand_index];
         local image_path = image_dir .. file
         local im = image.load(image_path,3);
-        local im_size = im:size();
-        im_batch[count] = im:reshape(1,im_size[1],im_size[2],im_size[3])
+        im = image.scale(im, 224, 224)
+        im_batch[count] = im
         -- else
         --     count = count -1
         -- end    
@@ -143,7 +143,7 @@ end
 --------------------------------------------------------------
 -- Returns the validation batch
 --------------------------------------------------------------
-function get_validation_batch(num_images,val_path)
+function get_validation_batch(num_images,val_path,reset_val_seed)
     local val_image_dir = val_path
    
     local max_count = num_images;
@@ -157,18 +157,19 @@ function get_validation_batch(num_images,val_path)
     local image_path = val_image_dir .. file
     local im = image.load(image_path);
     local im_size = im:size();
-    local im_batch = torch.Tensor(num_images, im_size[1], im_size[2], im_size[3])
+    local im_batch = torch.Tensor(num_images, 3, 224, 224)
     
     -- IMP code
-    math.randomseed(10)
+    if reset_val_seed then
+        math.randomseed(10)
+    end
     for count=1,num_images do
         rand_index = math.random(1,num_files);
         local file = file_names[rand_index];
         local image_path = val_image_dir .. file
         local im = image.load(image_path,3);
-        local im_size = im:size();
-        im_batch[count] = im:reshape(1,im_size[1],im_size[2],im_size[3])
-        -- else
+        im = image.scale(im, 224, 224)
+        im_batch[count] = im        -- else
         --     count = count -1
         -- end    
     end
