@@ -2,7 +2,7 @@ require 'Utils'
 require 'nngraph';
 require 'loadcaffe'
 require 'image'
-require 'VGG'
+require 'VGG_AWS'
 require 'optim'
 
 function create_colorNet() 
