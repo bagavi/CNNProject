@@ -33,7 +33,6 @@ function preprocess(img)
 end
 
 function VGG_forward_test(img,net)
-    p_img = preprocess(img)
     prob,classes = net:forward(p_img):view(-1):sort(true)
     synset_words = load_synset()
     classes5 = {}
@@ -69,6 +68,22 @@ function get_VGG_hypercolumns(img,net,layer_nums)
     
     return hyper_columns
 end
+
+
+------------------------------------------------------------------
+-- Returns hypercolumns which we feed into the shallow net (with multiple inputs)
+-- We DO NOT scale the hypercolumns
+-----------------------------------------------------------------
+function get_hypercolumns(im_batch,net,layer_nums)
+    net:evaluate()
+    net:forward(im_batch)
+    hyper_columns = {im_batch}
+    for i=1,#layer_nums do
+        table.insert(hyper_columns,net.modules[layer_nums[i]].output)
+    end    
+    return hyper_columns
+end
+
 ----------------------------------------------------------------------------
 -- Loads a pretrained VGG. trained caffe binary, prototxt mentioned 
 -- in the function.

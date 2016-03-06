@@ -2,7 +2,7 @@ require 'Utils'
 require 'nngraph';
 require 'loadcaffe'
 require 'image'
-require 'VGG_AWS'
+require 'VGG'
 require 'optim'
 
 function create_colorNet() 
@@ -105,8 +105,10 @@ function create_colorNet()
     local level_7 = nn.SpatialMaxPooling(2,2,2,2)(nn.ReLU()( level_6point5 ))
 
     local level_7point5 = nn.SpatialBatchNormalization(128)( nn.SpatialConvolution(64, 128, 3, 3, 1, 1, 1, 1)(level_7))
+    
+    local level_7point5_2 = nn.SpatialBatchNormalization(128)( nn.SpatialConvolution(128, 128, 3, 3, 1, 1, 1, 1)(level_7point5))
 
-    local level_8 = nn.SpatialMaxPooling(2,2,2,2)(nn.ReLU()( level_7point5 ))
+    local level_8 = nn.SpatialMaxPooling(2,2,2,2)(nn.ReLU()( level_7point5_2 ))
     
     local level_9= nn.Tanh()( nn.SpatialConvolution(128, 2, 3, 3, 1, 1, 1, 1)(level_8)):annotate{
        name = 'Final Layer', description = 'Final output. Using Sigmoid',
