@@ -15,15 +15,16 @@ local cmd = torch.CmdLine()
 cmd:option('-batch_size', 4)
 
 -- Optimization options
-cmd:option('-num_iterations', 2000)
+cmd:option('-num_iterations', 10000)
 cmd:option('-learning_rate', 3e-6)
 cmd:option('-grad_clip', 5)
 -- cmd:option('-lr_decay_every', 5)
-cmd:option('-lr_decay_factor', 0.85)
+cmd:option('-lr_decay_factor', 0.70)
 
 -- Output options
 cmd:option('-print_every', 1)
-cmd:option('-checkpoint_every', 100)
+cmd:option('-decay_every', 300)
+cmd:option('-checkpoint_every', 1000)
 cmd:option('-checkpoint_name', '/mnt/results/checkpoint_class')
 cmd:option('-image_name', '/mnt/results/image_checkpoint')
 cmd:option('-plot_path', '/mnt/results/')
@@ -40,8 +41,8 @@ cmd:option('-gpu_backend', 'cuda')
 cmd:option('-load_model', true)
 cmd:option('-model_path','../../VGG_torch.t7')
 cmd:option('-all_class', false)
-cmd:option('-train_path','/mnt/Data/tiny-imagenet-200/train/lemon_sky_elephant/images/')
-cmd:option('-val_path','/mnt/Data/tiny-imagenet-200/val/lemon_sky_elephant/')
+cmd:option('-train_path','/mnt/Data/tiny-imagenet-200/train/lemon_sky_elephant_big/images/')
+cmd:option('-val_path','/mnt/Data/tiny-imagenet-200/val/lemon_sky_elephant_big/')
 cmd:option('-num_val_batches',2)
 
 local opt = cmd:parse(arg)
@@ -53,7 +54,7 @@ local opt = cmd:parse(arg)
 --local opt_clone = torch.deserialize(torch.serialize(opt))
 
 print("Loading the model...");
-local dtype = 'torch.DoubleTensor'
+local dtype = 'torch.CudaTensor'
 -- Creating a new model
 --local model = create_colorNet();
 
@@ -61,7 +62,13 @@ local dtype = 'torch.DoubleTensor'
 if opt.load_model then
     print("Loading the pretrained model: " .. opt.model_path);
     checkpoint_1 = torch.load(opt.model_path)
-    model = checkpoint_1.model
+    model = checkpoint_1.model 
+    model:type('torch.FloatTensor')
+    require 'cutorch'
+    require 'cunn'
+    model:type(dtype)
+    cutorch.setDevice(1)
+    model:cuda()
     print("Loaded the pretrained model: " .. opt.model_path);
 end
 
@@ -132,7 +139,15 @@ for i = 1, num_iterations do
     local args = {msg,  i, num_iterations, loss[1]}
     print(string.format(unpack(args)))
   end
-    
+  
+
+  local decay_every = opt.decay_every
+  if (decay_every > 0 and i % decay_every == 0)  then	
+    local old_lr = optim_config.learningRate
+    optim_config = {learningRate = old_lr * opt.lr_decay_factor}
+    print("New learning rate: " .. optim_config.learningRate );    
+  end
+
   -- Maybe save a checkpoint 
   local check_every = opt.checkpoint_every
   if (check_every > 0 and (i-1) % check_every == 0) or i == num_iterations then
@@ -160,6 +175,7 @@ for i = 1, num_iterations do
 
     -- Run validation in small batches as we cannot handle larger batches
     local uv_op = torch.Tensor(uv_images:size());
+    uv_op = uv_op:type(dtype)
     local val_loss = 0
     for val_batch=1,opt.num_val_batches do
         local start_index = (val_batch-1)*opt.batch_size+1
@@ -196,6 +212,7 @@ for i = 1, num_iterations do
 
     -- Save the model
     model:clearState()
+    --model:float()
     checkpoint.model = model
     print("Saving model checkpoint: ")
     local filename = string.format('%s_%d.t7', opt.checkpoint_name, i)
@@ -208,6 +225,8 @@ for i = 1, num_iterations do
     local imagepath = string.format('%s_%d/', opt.image_name, i)
     paths.mkdir(imagepath)
     
+    
+    y, uv_images, uv_op = y:type('torch.DoubleTensor'), uv_images:type('torch.DoubleTensor'), uv_op:type('torch.DoubleTensor')
     for j = 1,opt.batch_size*opt.num_val_batches do
         local size = 112
         local input_imagename =  string.format('%sinput_%d.png', imagepath, j)
@@ -224,10 +243,8 @@ for i = 1, num_iterations do
     
         
     -- Back to training mode
+    --model:cuda()
     model:training()
-    local old_lr = optim_config.learningRate
-    optim_config = {learningRate = old_lr * opt.lr_decay_factor}
-    print("New learning rate: " .. optim_config.learningRate );    
     collectgarbage()  
     
   end
