@@ -9,49 +9,37 @@ function create_colorNet()
     local dtype = 'torch.FloatTensor'
     
     -- Input image
-    local input1 = nn.Identity()():annotate{
+    local image_input = nn.Identity()():annotate{
        name = 'Conv Layer 1', description = 'Input Layer',
        graphAttributes = {color = 'green'}
     }
-    -- Features from layer 3
-     local input2 = nn.Identity()():annotate{
-       name = 'Conv Layer 2', description = 'Image Features',
+    
+    local level_1 = nn.Identity()():annotate{
+       name = 'Conv Layer 1', description = 'Input Layer',
        graphAttributes = {color = 'green'}
     }
-
-    -- Features from layer 6
-    local input3 = nn.Identity()():annotate{
-       name = 'Conv Layer 3', description = 'Image Features',
-       graphAttributes = {color = 'green'}
-    }
-
-    -- Features from layer 9    
-     local input4 = nn.Identity()():annotate{
-       name = 'Conv Layer 4', description = 'Image Features',
-       graphAttributes = {color = 'green'}
-    }
-
 
 
     ----------------------------------------------------------------------------------------------
 
     local dimension = 2
     -- Deconvoluting level 3 and level 6
-    local level_3_deconv = nn.SpatialFullConvolution(128, 32, 1, 1, 2, 2, 0, 0, 1, 1)(input2):annotate{
+    local level_3_deconv = nn.SpatialFullConvolution(128, 32, 1, 1, 2, 2, 0, 0, 1, 1)():annotate{
        name = 'Deconving level 3', description = 'To increase the dimension',
        graphAttributes = {color = 'yellow'}
     }
-    local level_6_deconv = nn.SpatialFullConvolution(256, 32, 2, 2, 4, 4, 0, 0, 2, 2)(input3):annotate{
+    local level_6_deconv = nn.SpatialFullConvolution(256, 32, 2, 2, 4, 4, 0, 0, 2, 2)():annotate{
        name = 'Deconving level 6', description = 'To increase the dimension',
        graphAttributes = {color = 'yellow'}
     }
 
-    local level_9_deconv = nn.SpatialFullConvolution(512, 64, 4, 4, 8, 8, 0, 0, 4, 4)(input4):annotate{
-       name = 'Deconving level 6', description = 'To increase the dimension',
+    local level_9_deconv = nn.SpatialFullConvolution(512, 64, 4, 4, 8, 8, 0, 0, 4, 4)():annotate{
+       name = 'Deconving level 9', description = 'To increase the dimension',
        graphAttributes = {color = 'yellow'}
     }
 
-    local output_VGG = (nn.JoinTable(dimension)({input1, 
+    local output_VGG = (nn.JoinTable(dimension)({image_input, 
+                                                level_1,
                                                 level_3_deconv, 
                                                 level_6_deconv, 
                                                 level_9_deconv})):annotate{
@@ -75,7 +63,8 @@ function create_colorNet()
        graphAttributes = {color = 'purple'}
     }
 
-     model = nn.gModule({input1, input2,input3, input4}, {level_9})
+    model = nn.gModule({image_input, level_1, level_3_deconv, level_6_deconv, level_9_deconv}, {level_9})
+    graph.dot(model.bg, 'MLP', 'Split_net')
 
     ----------------------------------------------------------------------------------------------
     

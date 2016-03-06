@@ -1,0 +1,173 @@
+digraph G {
+	graph [bb="0,0,1966,2082"];
+	node [label="\N",
+		shape=oval
+	];
+	n1	 [height=1.041,
+		label="Node1\ninput = {}\lreverseMap = {}",
+		pos="665,2044",
+		tooltip="[[C]]:-1_",
+		width=2.1497];
+	n2	 [color=purple,
+		height=1.3356,
+		label="Final Layer (2)\ndesc = Final output. Using Sigmoid\nmodule = nn.Tanh\lreverseMap = {}",
+		pos="665,1922",
+		tooltip="[./Net4.lua]:61_",
+		width=4.1515];
+	n1 -> n2	 [pos="e,665,1970.5 665,2006.3 665,1998.2 665,1989.4 665,1980.7"];
+	n3	 [height=1.041,
+		label="Node3\nmodule = nn.SpatialConvolution(128 -> 2, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="665,1800",
+		tooltip="[./Net4.lua]:61_",
+		width=6.4533];
+	n2 -> n3	 [pos="e,665,1837.7 665,1873.6 665,1865.1 665,1856.3 665,1847.8"];
+	n4	 [height=1.041,
+		label="Node4\nmodule = nn.SpatialMaxPooling(2x2, 2,2)\lreverseMap = {}",
+		pos="665,1688",
+		tooltip="[./Net4.lua]:59_",
+		width=4.8997];
+	n3 -> n4	 [pos="e,665,1725.8 665,1762.4 665,1753.9 665,1744.8 665,1736"];
+	n5	 [height=1.041,
+		label="Node5\nmodule = nn.ReLU\lreverseMap = {}",
+		pos="665,1576",
+		tooltip="[./Net4.lua]:59_",
+		width=2.4261];
+	n4 -> n5	 [pos="e,665,1613.8 665,1650.4 665,1641.9 665,1632.8 665,1624"];
+	n6	 [height=1.041,
+		label="Node6\nmodule = nn.SpatialBatchNormalization\lreverseMap = {}",
+		pos="665,1464",
+		tooltip="[./Net4.lua]:57_",
+		width=4.6805];
+	n5 -> n6	 [pos="e,665,1501.8 665,1538.4 665,1529.9 665,1520.8 665,1512"];
+	n7	 [height=1.041,
+		label="Node7\nmodule = nn.SpatialConvolution(128 -> 128, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="665,1352",
+		tooltip="[./Net4.lua]:57_",
+		width=6.7297];
+	n6 -> n7	 [pos="e,665,1389.8 665,1426.4 665,1417.9 665,1408.8 665,1400"];
+	n8	 [height=1.041,
+		label="Node8\nmodule = nn.SpatialBatchNormalization\lreverseMap = {}",
+		pos="665,1240",
+		tooltip="[./Net4.lua]:55_",
+		width=4.6805];
+	n7 -> n8	 [pos="e,665,1277.8 665,1314.4 665,1305.9 665,1296.8 665,1288"];
+	n9	 [height=1.041,
+		label="Node9\nmodule = nn.SpatialConvolution(64 -> 128, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="665,1128",
+		tooltip="[./Net4.lua]:55_",
+		width=6.5915];
+	n8 -> n9	 [pos="e,665,1165.8 665,1202.4 665,1193.9 665,1184.8 665,1176"];
+	n10	 [height=1.041,
+		label="Node10\nmodule = nn.SpatialMaxPooling(2x2, 2,2)\lreverseMap = {}",
+		pos="665,1016",
+		tooltip="[./Net4.lua]:53_",
+		width=4.8997];
+	n9 -> n10	 [pos="e,665,1053.8 665,1090.4 665,1081.9 665,1072.8 665,1064"];
+	n11	 [height=1.041,
+		label="Node11\nmodule = nn.ReLU\lreverseMap = {}",
+		pos="665,904",
+		tooltip="[./Net4.lua]:53_",
+		width=2.4261];
+	n10 -> n11	 [pos="e,665,941.84 665,978.37 665,969.93 665,960.83 665,952.01"];
+	n12	 [height=1.041,
+		label="Node12\nmodule = nn.SpatialBatchNormalization\lreverseMap = {}",
+		pos="665,792",
+		tooltip="[./Net4.lua]:52_",
+		width=4.6805];
+	n11 -> n12	 [pos="e,665,829.84 665,866.37 665,857.93 665,848.83 665,840.01"];
+	n13	 [height=1.041,
+		label="Node13\nmodule = nn.SpatialConvolution(195 -> 64, 3x3, 1,1, 1,1)\lreverseMap = {}",
+		pos="665,680",
+		tooltip="[./Net4.lua]:52_",
+		width=6.5915];
+	n12 -> n13	 [pos="e,665,717.84 665,754.37 665,745.93 665,736.83 665,728.01"];
+	n14	 [color=grey,
+		height=1.6303,
+		label="Joining layer. Fuck yeah! (14)\ndesc = Joining input, level1, deconved_level3, deconved_level6\nmodule = nn.JoinTable\lreverseMap = {}\lmapindex = {\
+Node15,Node16,Node17,Node18,Node19}",
+		pos="665,547",
+		tooltip="[./Net4.lua]:41_",
+		width=7.1778];
+	n13 -> n14	 [pos="e,665,605.9 665,642.51 665,634.26 665,625.24 665,616.15"];
+	n15	 [color=green,
+		height=1.3356,
+		label="Conv Layer 1 (15)\ndesc = Input Layer\nmodule = nn.Identity\lreverseMap = {}",
+		pos="94,404",
+		tooltip="[./Net4.lua]:12_",
+		width=2.6117];
+	n14 -> n15	 [pos="e,160.71,438.12 451.51,513.8 370.72,498.85 278.6,478.42 197,452 188.12,449.12 178.99,445.7 170,442.02"];
+	n16	 [color=green,
+		height=1.3356,
+		label="Conv Layer 1 (16)\ndesc = Input Layer\nmodule = nn.Identity\lreverseMap = {}",
+		pos="300,404",
+		tooltip="[./Net4.lua]:17_",
+		width=2.6117];
+	n14 -> n16	 [pos="e,368.35,437.16 523.79,497.78 484.43,483.68 441.83,467.79 403,452 394.71,448.63 386.11,444.97 377.57,441.23"];
+	n17	 [color=yellow,
+		height=1.3356,
+		label="Deconving level 3 (17)\ndesc = To increase the dimension\nmodule = nn.SpatialFullConvolution(128 -> 32, 1x1, 2,2, 1,1)\lreverseMap = {}",
+		pos="665,404",
+		tooltip="[./Net4.lua]:27_",
+		width=7.0298];
+	n14 -> n17	 [pos="e,665,452.12 665,488.24 665,479.7 665,470.9 665,462.36"];
+	n18	 [color=yellow,
+		height=1.3356,
+		label="Deconving level 6 (18)\ndesc = To increase the dimension\nmodule = nn.SpatialFullConvolution(256 -> 32, 2x2, 4,4, 2,2)\lreverseMap = {}",
+		pos="1189,404",
+		tooltip="[./Net4.lua]:31_",
+		width=7.0298];
+	n14 -> n18	 [pos="e,1045.3,443.66 829.72,501.68 895.51,483.97 970.83,463.71 1035.5,446.31"];
+	n19	 [color=yellow,
+		height=1.3356,
+		label="Deconving level 9 (19)\ndesc = To increase the dimension\nmodule = nn.SpatialFullConvolution(512 -> 64, 4x4, 8,8, 4,4)\lreverseMap = {}",
+		pos="1713,404",
+		tooltip="[./Net4.lua]:36_",
+		width=7.0298];
+	n14 -> n19	 [pos="e,1535.3,438.32 898.49,521.7 1055.1,504.5 1265.8,479.66 1451,452 1475.1,448.4 1500.4,444.29 1525.4,440.03"];
+	n20	 [height=1.3356,
+		label="Node20\ninput = {}\lselectindex = 1\lreverseMap = {}",
+		pos="205,272",
+		tooltip="[[C]]:-1_-1",
+		width=2.1497];
+	n15 -> n20	 [pos="e,169.33,314.78 130.96,359.71 141.1,347.84 152.17,334.87 162.59,322.67"];
+	n21	 [height=1.3356,
+		label="Node21\ninput = {}\lselectindex = 2\lreverseMap = {}",
+		pos="395,272",
+		tooltip="[[C]]:-1_-2",
+		width=2.1497];
+	n16 -> n21	 [pos="e,363.36,316.3 332.43,358.62 340.47,347.62 349.16,335.73 357.43,324.41"];
+	n22	 [height=1.3356,
+		label="Node22\ninput = {}\lselectindex = 3\lreverseMap = {}",
+		pos="665,272",
+		tooltip="[[C]]:-1_-3",
+		width=2.1497];
+	n17 -> n22	 [pos="e,665,320.48 665,355.7 665,347.54 665,338.99 665,330.6"];
+	n23	 [height=1.3356,
+		label="Node23\ninput = {}\lselectindex = 4\lreverseMap = {}",
+		pos="1014,272",
+		tooltip="[[C]]:-1_-4",
+		width=2.1497];
+	n18 -> n23	 [pos="e,1063.1,309.45 1127.3,357.17 1109,343.6 1089.1,328.81 1071.2,315.47"];
+	n24	 [height=1.3356,
+		label="Node24\ninput = {}\lselectindex = 5\lreverseMap = {}",
+		pos="1538,272",
+		tooltip="[[C]]:-1_-5",
+		width=2.1497];
+	n19 -> n24	 [pos="e,1587.1,309.45 1651.3,357.17 1633,343.6 1613.1,328.81 1595.2,315.47"];
+	n25	 [height=1.041,
+		label="Node25\nreverseMap = {}\lnSplitOutputs = 5",
+		pos="665,150",
+		tooltip="[[C]]:-1_ split at [...e/kedart/torch/install/share/lua/5.1/nngraph/gmodule.lua]:72-mnode",
+		width=2.2307];
+	n20 -> n25	 [pos="e,588.49,161.51 264.54,241.07 278.56,234.81 293.61,228.69 308,224 398.19,194.62 505.21,174.61 578.4,163.08"];
+	n21 -> n25	 [pos="e,607.64,176.49 457.28,243.32 499.5,224.55 555.25,199.78 598.36,180.62"];
+	n22 -> n25	 [pos="e,665,187.72 665,223.57 665,215.1 665,206.27 665,197.81"];
+	n23 -> n25	 [pos="e,728.85,172.95 946.71,247.86 887.01,227.34 799.99,197.41 738.49,176.27"];
+	n24 -> n25	 [pos="e,741.48,161.51 1462.4,260.61 1300.8,238.39 922.33,186.37 751.44,162.88"];
+	n26	 [height=1.041,
+		label="Node26\ninput = {}\lreverseMap = {}",
+		pos="665,38",
+		tooltip="[[C]]:-1_",
+		width=2.1497];
+	n25 -> n26	 [pos="e,665,75.844 665,112.37 665,103.93 665,94.829 665,86.011"];
+}

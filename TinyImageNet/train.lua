@@ -12,7 +12,7 @@ local cmd = torch.CmdLine()
 -- Dataset options
 -- cmd:option('-input_h5', 'data/tiny-shakespeare.h5')
 -- cmd:option('-input_json', 'data/tiny-shakespeare.json')
-cmd:option('-batch_size', 4)
+cmd:option('-batch_size', 8)
 
 -- Optimization options
 cmd:option('-num_iterations', 2000)
@@ -45,8 +45,6 @@ cmd:option('-val_path','../../Data/tiny-imagenet-200/val/lemon_sky_elephant_big/
 cmd:option('-num_val_batches',2)
 
 local opt = cmd:parse(arg)
-
--- Functions for validation testing
 
 
 -- Initialize the model and criterion
@@ -89,12 +87,10 @@ end
 
 -- Loss function that we pass to an optim method
 local function f(w)
---  assert(w == params)
 
+  -- Setting up the dataset
   im_batch = get_image_batch(opt.batch_size, opt.train_path) -- Generalizes
-
   x = torch.Tensor(im_batch:size()[1],im_batch:size()[2],224,224)
-
   for i=1,im_batch:size()[1] do
     x[i] = preprocess(im_batch[i])
   end
@@ -143,7 +139,7 @@ for i = 1, num_iterations do
     
   -- Maybe save a checkpoint 
   local check_every = opt.checkpoint_every
-  if (check_every > 0 and (i-1) % check_every == 0) or i == num_iterations then
+  if (check_every > 0 and (i) % check_every == 0) or i == num_iterations then
     print("Evaluating on val dataset")
     -- Evaluate loss on the validation set. Note that we reset the state of
     -- the model; this might happen in the middle of an epoch, but that
@@ -216,10 +212,9 @@ for i = 1, num_iterations do
     local imagepath = string.format('%s_%d/', opt.image_name, i)
     paths.mkdir(imagepath)
     
-    for j = 1,opt.batch_size*opt.num_val_batches do
+    for j = 1,opt.batch_size do
         local size = 112
         local input_imagename =  string.format('%sinput_%d.png', imagepath, j)
-        
         image.save(input_imagename, image.scale(y2rgb(image.rgb2y(im_batch[j])),size,size))
         
         local output_imagename =  string.format('%soutput_%d.png', imagepath, j)

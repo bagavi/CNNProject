@@ -2,12 +2,11 @@ require 'Utils'
 require 'nngraph';
 require 'loadcaffe'
 require 'image'
-require 'VGG_AWS'
+require 'VGG'
 require 'optim'
 
 function create_colorNet() 
     local net = load_VGG();
-    local dtype = 'torch.FloatTensor'
     
     local input = nn.Identity()():annotate{
        name = 'Conv Layer 1', description = 'Image Features',
