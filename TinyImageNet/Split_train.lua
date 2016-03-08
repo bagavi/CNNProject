@@ -16,10 +16,10 @@ cmd:option('-batch_size', 8)
 
 -- Optimization options
 cmd:option('-num_iterations', 2000)
-cmd:option('-learning_rate', 3e-4)
+cmd:option('-learning_rate', 1e-7)
 cmd:option('-grad_clip', 5)
 -- cmd:option('-lr_decay_every', 5)
-cmd:option('-lr_decay_factor', 0.85)
+cmd:option('-lr_decay_factor', 0.7)
 
 -- Output options
 cmd:option('-print_every', 1)
@@ -56,7 +56,7 @@ local dtype = 'torch.FloatTensor'
 local net = load_VGG();
 net:type(dtype)
 -- trimming the net
-trim_net(net, 22)
+-- trim_net(net, 22)
 -- Creating a new model
 local model = create_colorNet();
 model:type(dtype)
@@ -92,6 +92,8 @@ end
 
 -- Loss function that we pass to an optim method
 local function f(w)
+
+  grad_params:zero()
   
   -- Setting up the dataset
   im_batch = get_image_batch(opt.batch_size, opt.train_path) -- Generalizes
@@ -99,26 +101,28 @@ local function f(w)
   for i=1,im_batch:size()[1] do
     x[i] = preprocess(im_batch[i])
   end
+
   uv_images, y_images = create_yuv_images(im_batch,56,56)
   x, uv_images = x:type(dtype), uv_images:type(dtype)
   local y = uv_images*2
 
   -- Receiving the hypercolumns
-  x = get_hypercolumns(x,net,{3,8,15,22})
+  local hp = get_hypercolumns(x,net,{3,8,15,22})
   
   -- Forward pass to cour net
-  local scores = model:forward(x)
+  local scores = model:forward(hp)
   local loss   = crit:forward(scores, y)
 
   -- Run the Criterion and model backward to compute gradients, maybe timing it
   local grad_scores = crit:backward(scores, y)
-  model:backward(x, grad_scores)
-
+  model:backward(hp, grad_scores)
+  hp        = nil
   x         = nil
   scores    = nil
   uv_images = nil
   y_images  = nil
   im_batch  = nil
+  grad_scores = nil
   return loss, grad_params
 end
 

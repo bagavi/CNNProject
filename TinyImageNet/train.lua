@@ -12,7 +12,7 @@ local cmd = torch.CmdLine()
 -- Dataset options
 -- cmd:option('-input_h5', 'data/tiny-shakespeare.h5')
 -- cmd:option('-input_json', 'data/tiny-shakespeare.json')
-cmd:option('-batch_size', 8)
+cmd:option('-batch_size', 12)
 
 -- Optimization options
 cmd:option('-num_iterations', 2000)
@@ -97,7 +97,8 @@ local function f(w)
   uv_images, y_images = create_yuv_images(im_batch,56,56)
   x, uv_images = x:type(dtype), uv_images:type(dtype)
 --   local y = uv_images + 0.5
-  local y = uv_images*2
+--   local y = uv_images*2
+  local y = uv_images
 
   local scores = model:forward(x)
   local loss   = crit:forward(scores, y)
@@ -160,7 +161,8 @@ for i = 1, num_iterations do
     local uv_images, y_images = create_yuv_images(im_batch,56,56)
     local x, uv_images = x:type(dtype), uv_images:type(dtype)
 --     local y = uv_images + 0.5
-    local y = uv_images*2
+--     local y = uv_images*2
+    local y = uv_images
 
     -- Run validation in small batches as we cannot handle larger batches
     local uv_op = torch.Tensor(uv_images:size());
