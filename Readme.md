@@ -4,6 +4,9 @@
 After cloing the git repository. Download the following files in a 'Data' Folder just before the folder of this repo
 
 ## Structure
+1. TinyImageNet/train.lua can be used to train the neural network framework. Options to choose the input dataset, loading a pre-trained model, and other hyperparameters are included in the code itself. If running on a GPU, you may use train_AWS.lua
+2. TinyImageNet/test-checkpoint.ipynb can be used to view the results (or intermediate results) of the training procedure.
+
 ## Data
 1. TinyImageNet: TinyImageNet (will contain the training. test, val examples)= http://cs231n.stanford.edu/tiny-imagenet-200.zip (Unzip it)p
 
