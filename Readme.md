@@ -4,8 +4,11 @@
 After cloing the git repository. Download the following files in a 'Data' Folder just before the folder of this repo
 
 ## Structure
-1. TinyImageNet/train.lua can be used to train the neural network framework. Options to choose the input dataset, loading a pre-trained model, and other hyperparameters are included in the code itself. If running on a GPU, you may use train_AWS.lua
-2. TinyImageNet/test-checkpoint.ipynb can be used to view the results (or intermediate results) of the training procedure.
+1. [TinyImageNet/train.lua](TinyImageNet/train.lua) can be used to train the neural network framework. Options to choose the input dataset, loading a pre-trained model, and other hyperparameters are included in the code itself. If running on a GPU, you may use train_AWS.lua
+2. [TinyImageNet/test-checkpoint.ipynb](TinyImageNet/test-checkpoint.ipynb) can be used to view the results (or intermediate results) of the training procedure.
+3. [TinyImageNet/Net3.lua](TinyImageNet/Net3.lua) Contains the Neural Network framework, which we used for majority of our experiments. Other frameworks are in Net1.lua, Net2.lua, Net4.lua, which we use for experimenting.
+4. [TinyImageNet/VGG.lua](TinyImageNet/VGG.lua) Contains functions for loading, pruning the VGG net. Also contains VGG-specific utility functions including preprocessing data and extracting hypercolumns from VGG
+5. [TinyImageNet/Utils.lua](TinyImageNet/Utils.lua) Contains some generic torch utility functions which we needed while working on the project.
 
 ## Data
 1. TinyImageNet: TinyImageNet (will contain the training. test, val examples)= http://cs231n.stanford.edu/tiny-imagenet-200.zip (Unzip it)p
