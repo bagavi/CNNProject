@@ -16,7 +16,7 @@ cmd:option('-batch_size', 12)
 
 -- Optimization options
 cmd:option('-num_iterations', 2000)
-cmd:option('-learning_rate', 3e-6)
+cmd:option('-learning_rate', 3e-8)
 cmd:option('-grad_clip', 5)
 -- cmd:option('-lr_decay_every', 5)
 cmd:option('-lr_decay_factor', 0.85)
